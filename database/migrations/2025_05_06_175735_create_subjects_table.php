@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->unsignedBigInteger('teacher_id');
             $table->foreign('teacher_id')->references('teacher_id')->on('teachers')->onDelete('cascade');
+            $table->string('img')->nullable();  
             $table->dateTime('created_at')->useCurrent();
         });
     }

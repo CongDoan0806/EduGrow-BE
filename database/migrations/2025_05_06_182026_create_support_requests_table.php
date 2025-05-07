@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('message');
             $table->string('status');
             $table->dateTime('created_at')->useCurrent();
+
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
             $table->foreign('teacher_id')->references('teacher_id')->on('teachers')->onDelete('cascade');
             $table->foreign('admin_id')->references('admin_id')->on('admins')->onDelete('cascade');

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('semester_goals', function (Blueprint $table) {
             $table->id('goal_id');
             $table->unsignedBigInteger('student_id');
-            $table->string('subject');
+            $table->unsignedBigInteger('subject_id');  
             $table->string('title');
             $table->string('semester');
             $table->text('description')->nullable();
@@ -24,6 +24,7 @@ return new class extends Migration
             $table->date('deadline');
             $table->dateTime('created_at')->useCurrent();
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
+            $table->foreign('subject_id')->references('subject_id')->on('subjects')->onDelete('cascade'); 
         });
     }
 
