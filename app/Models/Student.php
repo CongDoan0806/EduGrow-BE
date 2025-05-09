@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Student extends Model
+class Student extends Authenticatable
 {
-    use HasFactory;
-
-    protected $table = 'students'; 
+    use HasFactory, HasApiTokens;
+    protected $table = 'students';
     protected $primaryKey = 'student_id';
-    public $timestamps = false; 
 
-    protected $fillable = ['name', 'email', 'password', 'created_at'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'created_at',
+    ];
 
     public function classGroup()
     {
@@ -50,3 +55,4 @@ class Student extends Model
         return $this->hasMany(SupportRequest::class, 'student_id');
     }
 }
+

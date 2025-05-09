@@ -2,19 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+<<<<<<< be/feat/handle-login
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    use HasFactory;
-
+    use HasFactory, HasApiTokens;
     protected $table = 'admins';
     protected $primaryKey = 'admin_id';
-    public $timestamps = false;
-
-    protected $fillable = ['name', 'email', 'password', 'created_at'];
-
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'created_at',
+    ];
     public function supportRequest()
     {
         return $this->hasMany(SupportRequest::class, 'admin_id');

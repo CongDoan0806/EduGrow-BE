@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Teacher extends Model
+class Teacher extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, HasApiTokens;
 
     protected $table = 'teachers';
     protected $primaryKey = 'teacher_id';
-    public $timestamps = false;
-
-    protected $fillable = ['name', 'email', 'password', 'created_at'];
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+        'created_at',
+    ];
 
     public function subject()
     {
