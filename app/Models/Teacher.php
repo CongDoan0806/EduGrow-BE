@@ -19,4 +19,20 @@ class Teacher extends Authenticatable
         'password',
         'created_at',
     ];
+
+    public function subject()
+    {
+        return $this->hasMany(Subject::class, 'teacher_id');
+    }
+
+    public function tag()
+    {
+        return $this->hasMany(Tag::class, 'teacher_id');
+    }
+
+    public function supportRequest()
+    {
+        return $this->hasMany(SupportRequest::class, 'teacher_id');
+    }
 }
+

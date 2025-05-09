@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+<<<<<<< be/feat/handle-login
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Sanctum\HasApiTokens;
@@ -18,4 +19,9 @@ class Admin extends Authenticatable
         'password',
         'created_at',
     ];
+    public function supportRequest()
+    {
+        return $this->hasMany(SupportRequest::class, 'admin_id');
+    }
 }
+
