@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class StudentSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::table('students')->insert([
@@ -29,6 +24,8 @@ class StudentSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'created_at' => now(),
             ],
+            
         ]);
+        
     }
 }
