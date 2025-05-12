@@ -1,9 +1,11 @@
 <?php
 namespace App\Services;
 
+use App\Models\Student;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\StudentRepository;
+
 
 class StudentService
 {
@@ -30,5 +32,10 @@ class StudentService
         $hashedPassword = Hash::make($data['new_password']);
 
         return $this->studentRepository->changePassword($student, $hashedPassword);
+    }
+
+    public function getTodayGoals(Student $student)
+    {
+        return $this->studentRepository->getTodayGoals($student);
     }
 }
