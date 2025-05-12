@@ -63,4 +63,17 @@ class StudentController extends Controller
             'message' => 'Password has been changed successfully.',
         ]);
     }
+
+    public function getTodayGoals()
+    {
+        $user = auth()->guard('student')->user();
+        
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+        
+        $goals = $this->studentService->getTodayGoals($user);
+        
+        return response()->json($goals);
+    }
 }
