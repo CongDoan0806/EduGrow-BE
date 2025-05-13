@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Models\Tag;
 use App\Models\Teacher;
 
 class TeacherRepository
@@ -24,5 +25,9 @@ class TeacherRepository
         return $this->model->select('teacher_id as id', 'name', 'title', 'image', 'facebook', 'linkedin', 'twitter')
             ->where('teacher_id', $id)
             ->first();
+    }
+    public function createFeedback(array $data)
+    {
+        return Tag::create($data);
     }
 }

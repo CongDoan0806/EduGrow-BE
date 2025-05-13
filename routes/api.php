@@ -17,4 +17,5 @@ Route::put('/changePassword', [StudentController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
 
