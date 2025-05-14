@@ -2,13 +2,13 @@
 namespace App\Repositories;
 
 use App\Models\Student;
+use App\Models\Subject;
 
 class StudentRepository
 {
     public function updateInfo(Student $student, array $data)
     {
         $student->name = $data['name'];
-        $student->email = $data['email'];
         $student->phone = $data['phone'];
         $student->avatar = $data['avatar'];
 
@@ -23,5 +23,10 @@ class StudentRepository
         $student->save();
 
         return $student;
+    }
+
+    public function getAllSubjects()
+    {
+        return Subject::all();
     }
 }

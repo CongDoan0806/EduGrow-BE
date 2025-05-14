@@ -31,4 +31,9 @@ class StudentService
 
         return $this->studentRepository->changePassword($student, $hashedPassword);
     }
+
+    public function getAllSubjects()
+    {
+        return $this->studentRepository->getAllSubjects();
+    }
 }
