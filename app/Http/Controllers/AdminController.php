@@ -18,4 +18,11 @@ class AdminController extends Controller
             'data'=>$student
         ]);
     }
+    public function showListTeacher(){
+        $teacher = $this->AdminService->getAllTeacher();
+        return response()->json([
+            'success'=>true,
+            'data'=>$teacher
+        ]);
+    }
 }
