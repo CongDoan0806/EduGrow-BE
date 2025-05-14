@@ -19,7 +19,7 @@ class StudentController extends Controller
             $data = $request->validate([
                 'name' => 'required|string',
                 'phone' => ['required', 'regex:/^(\+84|0)[3|5|7|8|9][0-9]{8}$/'],
-                'avatar' => 'nullable|string'
+               'avatar' => 'nullable|string'
             ]);
 
 

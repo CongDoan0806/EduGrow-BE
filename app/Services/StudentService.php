@@ -14,10 +14,42 @@ class StudentService
         $this->studentRepository = $studentRepository;
     }
 
-    public function updateInfo($student, array $data)
-    {
-        return $this->studentRepository->updateInfo($student, data: $data);
+public function updateInfo($student, array $data)
+{
+    if (isset($data['avatar']) && $this->isBase64Image($data['avatar'])) {
+        $data['avatar'] = $this->saveBase64Image($data['avatar']);
     }
+
+    return $this->studentRepository->updateInfo($student, $data);
+}
+
+private function isBase64Image($data)
+{
+    return preg_match('/^data:image\/(\w+);base64,/', $data);
+}
+
+private function saveBase64Image($base64Image)
+{
+    if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
+        $base64Image = substr($base64Image, strpos($base64Image, ',') + 1);
+        $type = strtolower($type[1]); // jpg, png, etc.
+
+        $imageData = base64_decode($base64Image);
+        if ($imageData === false) {
+            throw new \Exception('base64_decode failed');
+        }
+
+        $filename = uniqid() . '.' . $type;
+        $path = public_path('uploads/avatars/' . $filename);
+        file_put_contents($path, $imageData);
+
+        return 'uploads/avatars/' . $filename;
+    }
+
+    return null;
+}
+
+
 
     public function changePassword($student, array $data)
     {

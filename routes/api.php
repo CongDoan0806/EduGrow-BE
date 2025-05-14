@@ -15,5 +15,7 @@ Route::put('/profile', [StudentController::class, 'updateInfo']);
 Route::put('/changePassword', [StudentController::class, 'changePassword']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+Route::get('/student/subjects', [StudentController::class, 'showSubjects']);
+
 
 
