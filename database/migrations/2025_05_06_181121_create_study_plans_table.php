@@ -18,9 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('student_id');
             $table->string('title');
             $table->string('day_of_week');
+            $table->date('date');
             $table->time('start_time');
             $table->time('end_time');
             $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent();
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
         });
     }
