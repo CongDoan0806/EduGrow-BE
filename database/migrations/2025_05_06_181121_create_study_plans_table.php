@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('study_plans'); // <- thêm dòng này
         Schema::create('study_plans', function (Blueprint $table) {
             $table->id('plan_id');
             $table->unsignedBigInteger('student_id');

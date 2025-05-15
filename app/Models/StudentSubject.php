@@ -10,7 +10,6 @@ class StudentSubject extends Model
     use HasFactory;
 
     protected $table = 'student_subject';
-    public $timestamps = false;
 
     protected $fillable = ['student_id', 'subject_id', 'joined_at', 'created_at'];
 

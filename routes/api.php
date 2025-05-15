@@ -15,5 +15,7 @@ Route::put('/profile', [StudentController::class, 'updateInfo']);
 Route::put('/changePassword', [StudentController::class, 'changePassword']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
-
-
+Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
+Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
+// Route::get('/{studentId}/week-date/{weekNumber}', [StudentController::class, 'getWeekStartEndDate']);
+Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
