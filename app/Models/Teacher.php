@@ -16,6 +16,7 @@ class Teacher extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',    
         'password',
         'created_at',
     ];

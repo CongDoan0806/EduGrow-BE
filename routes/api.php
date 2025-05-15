@@ -15,5 +15,5 @@ Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class,
 Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
 Route::put('/profile', [StudentController::class, 'updateInfo']);
 Route::put('/changePassword', [StudentController::class, 'changePassword']);
-
+Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
 

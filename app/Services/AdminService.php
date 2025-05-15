@@ -15,4 +15,9 @@ class AdminService{
     public function getAllTeacher(){
         return $this->adminRepository->getAllTeacher();
     }
+    public function createUser(array $data)
+    {
+        return $this->adminRepository->addUser($data);
+    }
+
 }

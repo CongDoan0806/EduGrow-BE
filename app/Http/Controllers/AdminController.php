@@ -25,4 +25,29 @@ class AdminController extends Controller
             'data'=>$teacher
         ]);
     }
+    public function add(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:students,email|unique:teachers,email',
+            'role' => 'required|in:student,teacher',
+            'phone' => 'required|string',
+            'password'=>'required|string',
+            'class_name'=>'nullable|string',
+        ]);
+
+        try {
+            $user = $this->AdminService->createUser($validated);
+            return response()->json([
+                'success' => true,
+                'data' => $user
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
 }
