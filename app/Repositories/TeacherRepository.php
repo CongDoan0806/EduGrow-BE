@@ -2,7 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\LearningJournalClass;
 use App\Models\Tag;
+use App\Models\TagReplies;
 use App\Models\Teacher;
 
 class TeacherRepository
@@ -28,6 +30,6 @@ class TeacherRepository
     }
     public function createFeedback(array $data)
     {
-        return Tag::create($data);
+        return TagReplies::create($data);
     }
 }

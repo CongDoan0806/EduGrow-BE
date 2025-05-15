@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LearningJournalController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\StudyPlanController;
@@ -18,4 +19,5 @@ Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'get
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
 Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
-
+Route::middleware('auth:teacher')->get('teachers/learning-journal/{studentId}', [LearningJournalController::class, 'getLearningJournalByStudent']);
+Route::get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
