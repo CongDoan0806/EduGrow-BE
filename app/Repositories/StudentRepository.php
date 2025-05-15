@@ -2,6 +2,7 @@
 namespace App\Repositories;
 
 use App\Models\Student;
+use App\Models\Subject;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
 
@@ -10,7 +11,6 @@ class StudentRepository
     public function updateInfo(Student $student, array $data)
     {
         $student->name = $data['name'];
-        $student->email = $data['email'];
         $student->phone = $data['phone'];
         $student->avatar = $data['avatar'];
 
@@ -26,7 +26,10 @@ class StudentRepository
 
         return $student;
     }
-
+    public function getAllSubjects()
+    {
+        return Subject::all();
+    }
     public function getTodayGoals(Student $student)
     {
         $today = Carbon::today();
