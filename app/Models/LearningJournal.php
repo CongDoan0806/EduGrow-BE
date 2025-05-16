@@ -11,28 +11,27 @@ class LearningJournal extends Model
 
     protected $table = 'learning_journal';
     protected $primaryKey = 'learning_journal_id';
-    public $timestamps = false;
 
-    protected $fillable = ['id', 'semester', 'week_number', 'created_at'];
+   protected $fillable = ['student_subject_id','semester', 'week_number', 'start_date', 'end_date'];
 
     public function studentSubject()
     {
-        return $this->belongsTo(StudentSubject::class, 'id');
-    }
-
-    public function LearningJournalClass()
-    {
-        return $this->hasMany(LearningJournalClass::class, 'learning_journal_id');
-    }
-
-     public function LearningJournalSelf()
-    {
-        return $this->hasMany(LearningJournalSelf::class, 'learning_journal_id');
+        return $this->belongsTo(StudentSubject::class, 'student_subject_id');
     }
 
     public function tag()
     {
         return $this->hasMany(Tag::class, 'learning_journal_id');
+    }
+
+    public function learningJournalClass()
+    {
+        return $this->hasMany(LearningJournalClass::class, 'learning_journal_id');
+    }
+
+    public function learningJournalSelf()
+    {
+        return $this->hasMany(LearningJournalSelf::class, 'learning_journal_id');
     }
     
 }

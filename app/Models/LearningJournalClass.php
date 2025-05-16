@@ -13,6 +13,7 @@ class LearningJournalClass extends Model
 
         protected $fillable = [
         'learning_journal_id',
+        'date',
         'my_lesson',
         'self_assessment',
         'difficulties',

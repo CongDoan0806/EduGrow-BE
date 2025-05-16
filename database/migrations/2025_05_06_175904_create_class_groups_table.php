@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('class_groups'); // <- thêm dòng này
         Schema::create('class_groups', function (Blueprint $table) {
             $table->id('class_id');
             $table->string('class_name');

@@ -11,9 +11,8 @@ class Subject extends Model
 
     protected $table = 'subjects';
     protected $primaryKey = 'subject_id';
-    public $timestamps = false;
 
-    protected $fillable = ['name', 'description', 'teacher_id', 'created_at'];
+     protected $fillable = ['subject_id', 'name', 'description', 'teacher_id', 'img'];
 
     public function teacher()
     {

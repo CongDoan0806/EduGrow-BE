@@ -11,7 +11,6 @@ class SemesterGoal extends Model
 
     protected $table = 'semester_goals';
     protected $primaryKey = 'goal_id';
-    public $timestamps = false;
 
     protected $fillable = ['student_id', 'subject', 'title', 'semester', 'description', 'status', 'deadline', 'created_at'];
 

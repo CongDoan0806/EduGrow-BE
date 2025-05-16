@@ -19,6 +19,9 @@ class Student extends Authenticatable
         'class_name',
         'password',
         'created_at',
+        'updated_at',
+        'phone',
+        'avatar'
     ];
 
     public function classGroup()

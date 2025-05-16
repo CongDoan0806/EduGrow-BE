@@ -13,13 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-         Schema::create('learning_journal_class', function (Blueprint $table) {
+        Schema::dropIfExists('learning_journal_class'); // <- thêm dòng này
+        Schema::create('learning_journal_class', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('learning_journal_id');
             $table->foreign('learning_journal_id')
-                  ->references('learning_journal_id')
-                  ->on('learning_journal')
-                  ->onDelete('cascade');
+                    ->references('learning_journal_id')
+                    ->on('learning_journal')
+                    ->onDelete('cascade');
             $table->string('my_lesson', 250);
             $table->string('self_assessment', 250);
             $table->string('difficulties', 250);
@@ -36,6 +37,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('learning_journal_contents');
+        Schema::dropIfExists('learning_journal_class');
     }
 };

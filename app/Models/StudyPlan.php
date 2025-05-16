@@ -11,7 +11,6 @@ class StudyPlan extends Model
 
     protected $table = 'study_plans';
     protected $primaryKey = 'plan_id';
-    public $timestamps = false;
 
     protected $fillable = ['student_id','title','day_of_week','start_time','end_time','date','created_at','updated_at'];
 
