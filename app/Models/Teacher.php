@@ -18,7 +18,18 @@ class Teacher extends Authenticatable
         'email',
         'phone',    
         'password',
+        'title',
+        'image',
+        'facebook',
+        'linkedin',
+        'twitter',
         'created_at',
+        'updated_at',
+    ];
+
+    protected $hidden = [
+        'password',
+        'remember_token',
     ];
 
     public function subject()

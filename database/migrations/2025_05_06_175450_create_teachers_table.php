@@ -16,9 +16,15 @@ return new class extends Migration
         Schema::create('teachers', function (Blueprint $table) {
             $table->id('teacher_id');
             $table->string('name');
+            $table->string('title')->nullable();
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('image')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('twitter')->nullable();
             $table->dateTime('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
