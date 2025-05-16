@@ -12,4 +12,12 @@ class AdminService{
     public function getAllStudent(){
         return $this->adminRepository->getAll();
     }
+    public function getAllTeacher(){
+        return $this->adminRepository->getAllTeacher();
+    }
+    public function createUser(array $data)
+    {
+        return $this->adminRepository->addUser($data);
+    }
+
 }

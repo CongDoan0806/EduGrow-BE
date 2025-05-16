@@ -13,6 +13,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class, 'showListTeacher']);
+Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
+Route::put('/profile', [StudentController::class, 'updateInfo']);
+Route::put('/changePassword', [StudentController::class, 'changePassword']);
+Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
 Route::middleware('auth:student')->group(function() {
     Route::get('/profile', [StudentController::class, 'showInfo']);
     Route::put('/profile', [StudentController::class, 'updateInfo']);
@@ -26,3 +31,4 @@ Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController
 Route::middleware('auth:teacher')->get('teachers/learning-journal/{studentId}', [LearningJournalController::class, 'getLearningJournalByStudent']);
 Route::get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
 Route::get('/student/subjects', [StudentController::class, 'showSubjects']);
+
