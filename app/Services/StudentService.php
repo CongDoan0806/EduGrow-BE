@@ -52,8 +52,6 @@ class StudentService
     {
         $studentSubjects = $this->studentRepository->getStudentSubjects($studentId);
         $subjectMap = $studentSubjects->pluck('subject.name', 'subject_id')->toArray();
-        \Log::info('Subject Map:', $subjectMap);
-
 
         $learningJournals = $this->studentRepository->getLearningJournals($studentId, $weekNumber);
 
@@ -256,10 +254,6 @@ class StudentService
                 ]);
             }
         }
-
-        \Log::info('studentSubject:', $subjectMap->toArray());
-        \Log::info('incoming in_class:', $data['in_class'] ?? []);
-        \Log::info('incoming self_study:', $data['self_study'] ?? []);
     }
 
     public function getWeekDates(int $studentId, int $weekNumber): array

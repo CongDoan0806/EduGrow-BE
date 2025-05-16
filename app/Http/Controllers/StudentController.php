@@ -16,33 +16,9 @@ class StudentController extends Controller
         $this->studentService = $studentService;
     }
 
-    public function updateInfo(Request $request)
+    public function showInfo(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email',
-            'phone' => ['required', 'regex:/^(\+84|0)[3|5|7|8|9][0-9]{8}$/'],
-            'avatar'=>'required|url',
-        ]);
-
-        $user = Auth::guard('student')->user();
-
-        if (!$user) {
-            return response()->json(['message' => 'User not authenticated'], 401);
-        }
-
-        if ($user->name == $data['name'] && $user->email == $data['email'] && $user->phone == $data['phone'] && $user->avatar == $data['avatar']) {
-            return response()->json([
-                'message' => 'No changes made.',
-            ], 200);
-        }
-
-        $updatedUser = $this->studentService->updateInfo($user, $data);
-
-        return response()->json([
-            'message' => 'User information updated successfully',
-            'user' => $updatedUser,
-        ], 200);
+        return response()->json($request->user());
     }
 
     public function updateTextInfo(Request $request)
@@ -60,7 +36,6 @@ class StudentController extends Controller
             'user' => $updatedUser,
         ], 200);
     }
-
     // Upload ảnh avatar dùng POST
     public function uploadAvatar(Request $request)
     {

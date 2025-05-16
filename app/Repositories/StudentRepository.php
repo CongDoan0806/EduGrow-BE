@@ -196,7 +196,6 @@ class StudentRepository
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error('Error saving journals: ' . $e->getMessage());
             throw $e;
         }
     }
