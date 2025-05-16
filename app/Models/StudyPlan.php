@@ -12,11 +12,10 @@ class StudyPlan extends Model
     protected $table = 'study_plans';
     protected $primaryKey = 'plan_id';
 
-    protected $fillable = ['student_id','title','day_of_week','start_time','end_time','created_at'];
+    protected $fillable = ['student_id','title','day_of_week','start_time','end_time','date','created_at','updated_at'];
 
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
 }
-

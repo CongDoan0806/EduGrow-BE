@@ -1,10 +1,12 @@
 <?php
 namespace App\Services;
 
+use App\Models\Student;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use App\Repositories\StudentRepository;
 use Carbon\Carbon;
+
 
 class StudentService
 {
@@ -15,11 +17,24 @@ class StudentService
         $this->studentRepository = $studentRepository;
     }
 
-    public function updateInfo($student, array $data)
+   public function updateInfoText($student, array $data)
     {
-        return $this->studentRepository->updateInfo($student, data: $data);
+        // Cập nhật name, phone
+        $student->name = $data['name'];
+        $student->phone = $data['phone'];
+        $student->save();
+
+        return $student;
     }
 
+    public function updateAvatar($student, string $avatarUrl)
+    {
+        $student->avatar = $avatarUrl;
+        $student->save();
+
+        return $student;
+    }
+   
     public function changePassword($student, array $data)
     {
         if (!Hash::check($data['current_password'], $student->password)) {
@@ -32,7 +47,7 @@ class StudentService
 
         return $this->studentRepository->changePassword($student, $hashedPassword);
     }
-    
+
     public function getLearningJournal($studentId, $weekNumber)
     {
         $studentSubjects = $this->studentRepository->getStudentSubjects($studentId);
@@ -245,12 +260,36 @@ class StudentService
         \Log::info('studentSubject:', $subjectMap->toArray());
         \Log::info('incoming in_class:', $data['in_class'] ?? []);
         \Log::info('incoming self_study:', $data['self_study'] ?? []);
-
-
     }
 
     public function getWeekDates(int $studentId, int $weekNumber): array
     {
          return $this->calculateWeekStartAndEndDate($studentId, $weekNumber);
     }
+
+    public function getAllSubjects()
+    {
+        return $this->studentRepository->getAllSubjects();
+    }
+
+    public function getTodayGoals(Student $student)
+    {
+        return $this->studentRepository->getTodayGoals($student);
+    }
+
+    public function getStudyPlans(int $studentId)
+    {
+        return $this->studentRepository->getStudyPlansByStudent($studentId);
+    }
+
+    public function createStudyPlan(array $data)
+    {
+        return $this->studentRepository->createStudyPlan($data);
+    }
+
+    public function deleteStudyPlan(int $id)
+    {
+        return $this->studentRepository->deleteStudyPlanById($id);
+    }
 }
+

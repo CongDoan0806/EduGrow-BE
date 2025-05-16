@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id('tag_id');
             $table->unsignedBigInteger('learning_journal_id');
-            $table->unsignedBigInteger('teacher_id');
-            $table->unsignedBigInteger('student_id');
+            $table->unsignedBigInteger('teacher_id')->nullable();
+            $table->unsignedBigInteger('student_id')->nullable();
             $table->text('message');
             $table->dateTime('created_at')->useCurrent();
             $table->foreign('learning_journal_id')->references('learning_journal_id')->on('learning_journal')->onDelete('cascade');

@@ -15,18 +15,18 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+   'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
-    'allowed_methods' => ['*'],
+'supports_credentials' => true,
 
-    'allowed_origins' => ['http://localhost:3001'], // React dev server
+'allowed_origins' => [
+    'http://localhost:3000',
+    'http://localhost:3001',
+],
 
-    'allowed_origins_patterns' => [],
+'allowed_headers' => ['*'],
 
-    'allowed_headers' => ['*'],
+'allowed_methods' => ['*'],
 
-    'supports_credentials' => true,
-    'exposed_headers' => [],
-    'max_age' => 0,
 
 ];

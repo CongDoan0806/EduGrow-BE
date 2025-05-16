@@ -11,21 +11,21 @@ class StudentSeeder extends Seeder
 {
     public function run()
     {
-        DB::table('students')->insert([
-            [
-                'name' => 'Tran Cong Doan',
-                'email' => 'student1@example.com',
-                'password' => Hash::make('password123'),
-                'created_at' => now(),
-            ],
-            [
-                'name' => 'To Nga',
-                'email' => 'student2@example.com',
-                'password' => Hash::make('password123'),
-                'created_at' => now(),
-            ],
-            
-        ]);
-        
+       DB::table('students')->insert([
+        [
+            'name' => 'Tran Cong Doan',
+            'email' => 'student1@example.com',
+            'password' => Hash::make('password123'),
+            'avatar' => 'default1.jpg',
+            'created_at' => now(),
+        ],
+        [
+            'name' => 'To Nga',
+            'email' => 'student2@example.com',
+            'password' => Hash::make('password123'),
+            'avatar' => 'default2.jpg',
+            'created_at' => now(),
+        ],
+    ]);   
     }
 }

@@ -17,8 +17,8 @@ return new class extends Migration
         Schema::create('tag_replies', function (Blueprint $table) {
             $table->id('reply_id');
             $table->unsignedBigInteger('tag_id');
-            $table->string('sender_type');
-            $table->unsignedBigInteger('sender_id');
+            $table->string('sender_type')->nullable();
+            $table->unsignedBigInteger('sender_id')->nullable();
             $table->text('content');
             $table->dateTime('created_at')->useCurrent();
             $table->foreign('tag_id')->references('tag_id')->on('tags')->onDelete('cascade');
