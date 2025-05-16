@@ -26,32 +26,6 @@ class StudentSeeder extends Seeder
             'avatar' => 'default2.jpg',
             'created_at' => now(),
         ],
-    ]);
-
-        DB::table('subjects')->insert([
-        [
-            'created_at' => now(),
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'img' => 'web-dev.jpg',
-            'name' => 'TOEIC',
-            'teacher_id' => 1, // Thêm trường teacher_id nếu có
-        ],
-        [
-            'created_at' => now(),
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'img' => 'database.jpg',
-            'name' => 'Speaking',
-            'teacher_id' => 2,
-        ],
-        [
-            'created_at' => now(),
-            'description' => 'Build mobile apps using Android Studio.',
-            'img' => 'mobile-app.jpg',
-            'name' => 'IT English',
-            'teacher_id' => 1,
-        ],
-    ]);
-
-        
+    ]);   
     }
 }
