@@ -111,7 +111,7 @@ class StudyPlanSeeder extends Seeder
                 'student_id' => $studentId,
                 'title' => 'Practice Speaking',
                 'day_of_week' => 'Friday',
-                'date' => Carbon::parse('2025-05-16')->format('Y-m-d'),
+                'date' => Carbon::parse('2025-05-13')->format('Y-m-d'),
                 'start_time' => '14:00:00',
                 'end_time' => '16:00:00',
                 'color' => '#ffcccc', // hồng nhạt

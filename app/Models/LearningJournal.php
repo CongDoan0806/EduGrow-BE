@@ -20,9 +20,14 @@ class LearningJournal extends Model
         return $this->belongsTo(StudentSubject::class, 'id');
     }
 
-    public function content()
+    public function LearningJournalClass()
     {
-        return $this->hasMany(LearningJournalContent::class, 'learning_journal_id');
+        return $this->hasMany(LearningJournalClass::class, 'learning_journal_id');
+    }
+
+     public function LearningJournalSelf()
+    {
+        return $this->hasMany(LearningJournalSelf::class, 'learning_journal_id');
     }
 
     public function tag()

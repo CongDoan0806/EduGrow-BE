@@ -30,4 +30,20 @@ class TeacherController extends Controller
         
         return response()->json($teacher);
     }
+
+    public function createFeedback(Request $request)
+    {
+        $user = auth()->guard('teacher')->user();
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+        $validatedData = $request->validate([
+            'tag_id' => 'required|integer|exists:tags,tag_id',
+            'content' => 'required|string|max:255',
+        ]);
+
+        $feedback = $this->teacherService->createFeedback($validatedData);
+
+        return response()->json($feedback, 201);
+    }
 }

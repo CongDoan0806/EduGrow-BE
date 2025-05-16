@@ -8,16 +8,23 @@ use Carbon\Carbon;
 
 class StudentRepository
 {
-    public function updateInfo(Student $student, array $data)
+    public function updateInfoText(Student $student, array $data)
     {
         $student->name = $data['name'];
         $student->phone = $data['phone'];
-        $student->avatar = $data['avatar'];
-
         $student->save();
 
         return $student;
     }
+
+    public function updateAvatar(Student $student, string $avatarUrl)
+    {
+        $student->avatar = $avatarUrl;
+        $student->save();
+
+        return $student;
+    }
+
 
     public function changePassword(Student $student, string $hashedPassword)
     {

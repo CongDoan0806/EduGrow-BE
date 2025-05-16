@@ -22,4 +22,8 @@ class TeacherService
     {
         return $this->teacherRepository->getTeacherById($id);
     }
+    public function createFeedback(array $data)
+    {
+        return $this->teacherRepository->createFeedback($data);
+    }
 }
