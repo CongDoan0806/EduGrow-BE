@@ -33,7 +33,7 @@ class LearningJournalRepository
                 'learning_journal_class.created_at'
             )
             ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'learning_journal_class.learning_journal_id')
-            ->join('student_subject', 'student_subject.id', '=', 'learning_journal.id')
+            ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
             ->join('subjects', 'subjects.subject_id', '=', 'student_subject.subject_id')
             ->where('subjects.teacher_id', $teacherId)
             ->where('student_subject.student_id', $studentId)
@@ -68,7 +68,7 @@ class LearningJournalRepository
             'learning_journal_self.created_at'
         )
         ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'learning_journal_self.learning_journal_id')
-        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.id')
+        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
         ->join('subjects', 'subjects.subject_id', '=', 'student_subject.subject_id')
         ->where('subjects.teacher_id', $teacherId)
         ->where('student_subject.student_id', $studentId)
