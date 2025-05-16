@@ -11,8 +11,7 @@ return new class extends Migration
         Schema::table('teachers', function (Blueprint $table) {
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
-            $table->timestamp('updated_at')->nullable();
-
+            $table->string('subject')->nullable();
         });
     }
     public function down()
@@ -20,7 +19,7 @@ return new class extends Migration
         Schema::table('teacher', function (Blueprint $table) {
             $table->dropColumn('phone');
             $table->dropColumn('avatar');
-            $table->dropColumn('updated_at');
+            $table->dropColumn('subject');
 
         });
     }

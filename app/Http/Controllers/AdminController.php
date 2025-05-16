@@ -34,6 +34,7 @@ class AdminController extends Controller
             'phone' => 'required|string',
             'password'=>'required|string',
             'class_name'=>'nullable|string',
+            'subject'=>'nullable|string'
         ]);
 
         try {

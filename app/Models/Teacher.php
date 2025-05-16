@@ -25,6 +25,7 @@ class Teacher extends Authenticatable
         'twitter',
         'created_at',
         'updated_at',
+        'subject',
     ];
 
     protected $hidden = [
