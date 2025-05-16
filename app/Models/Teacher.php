@@ -16,6 +16,7 @@ class Teacher extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'phone',    
         'password',
         'title',
         'image',
@@ -24,6 +25,7 @@ class Teacher extends Authenticatable
         'twitter',
         'created_at',
         'updated_at',
+        'subject',
     ];
 
     protected $hidden = [

@@ -13,9 +13,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-
+Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class, 'showListTeacher']);
+Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
+Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
-Route::get('/admin/student',[AdminController::class, 'showListStudent']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
 Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
@@ -31,6 +32,4 @@ Route::middleware('auth:student')->group(function () {
     Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
-    
 });
-
