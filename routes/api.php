@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LearningJournalController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\SemesterGoalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -32,4 +33,10 @@ Route::middleware('auth:student')->group(function () {
     Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
+
+    // Routes mới cho Semester Goal
+    Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
+    Route::post('/semester-goals', [SemesterGoalController::class, 'createSemesterGoal']);
+    Route::put('/semester-goals/content/{goalId}', [SemesterGoalController::class, 'updateGoalContent']);
+    Route::get('/subjects', [SemesterGoalController::class, 'getSubjects']);
 });
