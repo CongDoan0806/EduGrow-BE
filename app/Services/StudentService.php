@@ -92,8 +92,37 @@ class StudentService
         ];
     }
 
+    public function calculateWeekStartAndEndDate(int $studentId, int $weekNumber): array
+    {
+        $journals = $this->studentRepository->getJournalsByWeekAndStudent($weekNumber, $studentId);
 
-    public function saveLearningJournal($studentId, $data)
+        if ($journals->isNotEmpty()) {
+            return [
+                'start_date' => $journals->min('start_date'),
+                'end_date' => $journals->max('end_date'),
+            ];
+        }
+
+        $latestJournalWithData = $this->studentRepository->getPreviousJournal($studentId, $weekNumber);
+
+        if ($latestJournalWithData) {
+            $baseWeekNumber = $latestJournalWithData->week_number;
+            $baseEndDate = Carbon::parse($latestJournalWithData->end_date);
+            $weekDiff = $weekNumber - $baseWeekNumber;
+            $startDate = $baseEndDate->addDays(1 + ($weekDiff - 1) * 7)->toDateString();
+        } else {
+            $startDate = Carbon::now()->startOfWeek()->toDateString();
+        }
+
+        $endDate = Carbon::parse($startDate)->addDays(6)->toDateString();
+
+        return [
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+        ];
+    }
+
+     public function saveLearningJournal($studentId, $data)
     {
         $weekNumber = $data['week_number'];
         $learningJournals = $this->studentRepository->getLearningJournals($studentId, $weekNumber);
@@ -119,22 +148,9 @@ class StudentService
             }
         }
 
-        if ($learningJournals->isEmpty()) {
-            $prevWeekNumber = $weekNumber - 1;
-            $prevWeekJournals = $this->studentRepository->getLearningJournals($studentId, $prevWeekNumber);
-
-            if ($prevWeekJournals->isNotEmpty()) {
-                $prevWeekEndDate = $prevWeekJournals->first()->end_date;
-                $defaultStartDate = Carbon::parse($prevWeekEndDate)->addDay()->toDateString();
-                $defaultEndDate = Carbon::parse($defaultStartDate)->addDays(6)->toDateString();
-            } else {
-                $defaultStartDate = Carbon::now()->startOfWeek()->toDateString();
-                $defaultEndDate = Carbon::now()->endOfWeek()->toDateString();
-            }
-        } else {
-            $defaultStartDate = $learningJournals->min('start_date');
-            $defaultEndDate = $learningJournals->max('end_date');
-        }
+        $dates = $this->calculateWeekStartAndEndDate($studentId, $weekNumber);
+        $defaultStartDate = $dates['start_date'];
+        $defaultEndDate = $dates['end_date'];
 
         // -------- XỬ LÝ IN-CLASS JOURNALS --------
         if (!empty($data['in_class']) && is_array($data['in_class'])) {
@@ -235,32 +251,6 @@ class StudentService
 
     public function getWeekDates(int $studentId, int $weekNumber): array
     {
-        $journals = $this->studentRepository->getJournalsByWeekAndStudent($weekNumber, $studentId);
-
-        if ($journals->isNotEmpty()) {
-            return [
-                'start_date' => $journals->min('start_date'),
-                'end_date' => $journals->max('end_date'),
-            ];
-        }
-
-        $latestJournalWithData = $this->studentRepository->getPreviousJournal($studentId, $weekNumber);
-
-        if ($latestJournalWithData) {
-            $baseWeekNumber = $latestJournalWithData->week_number;
-            $baseEndDate = Carbon::parse($latestJournalWithData->end_date);
-
-            $weekDiff = $weekNumber - $baseWeekNumber;
-            $startDate = $baseEndDate->addDays(1 + ($weekDiff - 1) * 7)->toDateString();
-        } else {
-            $startDate = Carbon::now()->startOfWeek()->toDateString();
-        }
-
-        $endDate = Carbon::parse($startDate)->addDays(6)->toDateString();
-
-        return [
-            'start_date' => $startDate,
-            'end_date' => $endDate,
-        ];
+         return $this->calculateWeekStartAndEndDate($studentId, $weekNumber);
     }
 }
