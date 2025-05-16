@@ -8,39 +8,33 @@ use Carbon\Carbon;
 
 class StudyPlanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Lấy danh sách student_id từ bảng students
         $studentIds = DB::table('students')->pluck('student_id')->toArray();
-        
+
         if (empty($studentIds)) {
             return;
         }
-        
-        // Tạo dữ liệu mẫu cho study_plans
+
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
         $yesterday = Carbon::yesterday();
-        
+
         $studyPlans = [];
-        
-        // Tạo dữ liệu cho mỗi học sinh
+
         foreach ($studentIds as $studentId) {
-            // Kế hoạch học tập cho hôm nay
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Learn TOEIC',
-                'day_of_week' => $today->format('l'), // Trả về tên của ngày trong tuần (Monday, Tuesday, ...)
+                'day_of_week' => $today->format('l'),
                 'date' => $today->format('Y-m-d'),
                 'start_time' => '08:00:00',
                 'end_time' => '09:30:00',
+                'color' => '#cfe9ff', // xanh nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Practice Speaking',
@@ -48,10 +42,11 @@ class StudyPlanSeeder extends Seeder
                 'date' => $today->format('Y-m-d'),
                 'start_time' => '10:00:00',
                 'end_time' => '11:30:00',
+                'color' => '#ffcccc', // hồng nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Meeting with Mr. Hai',
@@ -59,11 +54,11 @@ class StudyPlanSeeder extends Seeder
                 'date' => $today->format('Y-m-d'),
                 'start_time' => '14:00:00',
                 'end_time' => '15:30:00',
+                'color' => '#ccffcc', // xanh lá nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
-            // Kế hoạch học tập cho ngày mai
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Interview with mgm',
@@ -71,10 +66,11 @@ class StudyPlanSeeder extends Seeder
                 'date' => $tomorrow->format('Y-m-d'),
                 'start_time' => '08:00:00',
                 'end_time' => '09:30:00',
+                'color' => '#ffffcc', // vàng nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Doing Homework IT English',
@@ -82,11 +78,11 @@ class StudyPlanSeeder extends Seeder
                 'date' => $tomorrow->format('Y-m-d'),
                 'start_time' => '10:00:00',
                 'end_time' => '11:30:00',
+                'color' => '#ffd699', // cam nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
-            // Kế hoạch học tập cho hôm qua
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Practice Presentation',
@@ -94,10 +90,11 @@ class StudyPlanSeeder extends Seeder
                 'date' => $yesterday->format('Y-m-d'),
                 'start_time' => '08:00:00',
                 'end_time' => '09:30:00',
+                'color' => '#d9ccff', // tím nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-            
+
             $studyPlans[] = [
                 'student_id' => $studentId,
                 'title' => 'Learn IT English',
@@ -105,11 +102,24 @@ class StudyPlanSeeder extends Seeder
                 'date' => $yesterday->format('Y-m-d'),
                 'start_time' => '10:00:00',
                 'end_time' => '11:30:00',
+                'color' => '#cfe9ff', // xanh nhạt lặp lại
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
+
+            $studyPlans[] = [
+                'student_id' => $studentId,
+                'title' => 'Practice Speaking',
+                'day_of_week' => 'Friday',
+                'date' => Carbon::parse('2025-05-13')->format('Y-m-d'),
+                'start_time' => '14:00:00',
+                'end_time' => '16:00:00',
+                'color' => '#ffcccc', // hồng nhạt
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         }
-        
+
         DB::table('study_plans')->insert($studyPlans);
     }
 }

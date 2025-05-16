@@ -16,40 +16,25 @@ class StudentService
         $this->studentRepository = $studentRepository;
     }
 
-    public function updateInfo($student, array $data)
+   public function updateInfoText($student, array $data)
     {
-        if (isset($data['avatar']) && $this->isBase64Image($data['avatar'])) {
-            $data['avatar'] = $this->saveBase64Image($data['avatar']);
-        }
+        // Cập nhật name, phone
+        $student->name = $data['name'];
+        $student->phone = $data['phone'];
+        $student->save();
 
-        return $this->studentRepository->updateInfo($student, $data);
+        return $student;
     }
 
-    private function isBase64Image($data)
+    public function updateAvatar($student, string $avatarUrl)
     {
-        return preg_match('/^data:image\/(\w+);base64,/', $data);
+        $student->avatar = $avatarUrl;
+        $student->save();
+
+        return $student;
     }
 
-    private function saveBase64Image($base64Image)
-    {
-        if (preg_match('/^data:image\/(\w+);base64,/', $base64Image, $type)) {
-            $base64Image = substr($base64Image, strpos($base64Image, ',') + 1);
-            $type = strtolower($type[1]); // jpg, png, etc.
-
-            $imageData = base64_decode($base64Image);
-            if ($imageData === false) {
-                throw new \Exception('base64_decode failed');
-            }
-
-            $filename = uniqid() . '.' . $type;
-            $path = public_path('uploads/avatars/' . $filename);
-            file_put_contents($path, $imageData);
-
-            return 'uploads/avatars/' . $filename;
-        }
-
-        return null;
-    }
+   
     public function changePassword($student, array $data)
     {
         if (!Hash::check($data['current_password'], $student->password)) {
@@ -70,6 +55,21 @@ class StudentService
     public function getTodayGoals(Student $student)
     {
         return $this->studentRepository->getTodayGoals($student);
+    }
+
+    public function getStudyPlans(int $studentId)
+    {
+        return $this->studentRepository->getStudyPlansByStudent($studentId);
+    }
+
+    public function createStudyPlan(array $data)
+    {
+        return $this->studentRepository->createStudyPlan($data);
+    }
+
+    public function deleteStudyPlan(int $id)
+    {
+        return $this->studentRepository->deleteStudyPlanById($id);
     }
 }
 
