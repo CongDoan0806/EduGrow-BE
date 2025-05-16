@@ -71,5 +71,20 @@ class StudentService
     {
         return $this->studentRepository->getTodayGoals($student);
     }
+
+    public function getStudyPlans(int $studentId)
+    {
+        return $this->studentRepository->getStudyPlansByStudent($studentId);
+    }
+
+    public function createStudyPlan(array $data)
+    {
+        return $this->studentRepository->createStudyPlan($data);
+    }
+
+    public function deleteStudyPlan(int $id)
+    {
+        return $this->studentRepository->deleteStudyPlanById($id);
+    }
 }
 

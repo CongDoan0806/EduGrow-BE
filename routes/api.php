@@ -12,11 +12,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-Route::put('/profile', [StudentController::class, 'updateInfo']);
-Route::put('/changePassword', [StudentController::class, 'changePassword']);
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
 Route::get('/student/subjects', [StudentController::class, 'showSubjects']);
-
+Route::middleware('auth:student')->group(function () {
+    Route::get('/study-plans', [StudentController::class, 'getStudyPlans']);
+    Route::post('/study-plans', [StudentController::class, 'addStudyPlan']);
+    Route::delete('/study-plans/{id}', [StudentController::class, 'deleteStudyPlan']);
+    Route::get('/profile', [StudentController::class, 'showInfo']);
+    Route::put('/profile', [StudentController::class, 'updateInfo']);
+    Route::put('/changePassword', [StudentController::class, 'changePassword']);
+});
 

@@ -39,4 +39,22 @@ class StudentRepository
             ->orderBy('start_time')
             ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date']);
     }
+
+ public function getStudyPlansByStudent($studentId)
+{
+    return StudyPlan::where('student_id', $studentId)
+        ->orderBy('date')
+        ->orderBy('start_time')
+        ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date', 'color']);
+}
+
+    public function createStudyPlan(array $data)
+    {
+        return StudyPlan::create($data);
+    }
+
+    public function deleteStudyPlanById(int $id)
+    {
+        return StudyPlan::where('plan_id', $id)->delete();
+    }
 }

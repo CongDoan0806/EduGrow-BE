@@ -90,4 +90,54 @@ class StudentController extends Controller
         
         return response()->json($goals);
     }
+    public function getStudyPlans()
+    {
+        $user = auth()->guard('student')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $plans = $this->studentService->getStudyPlans($user->student_id);
+
+        return response()->json($plans);
+    }
+
+public function addStudyPlan(Request $request)
+    {
+        $user = auth()->guard('student')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+       $data = $request->validate([
+            'title' => 'required|string',
+            'day_of_week' => 'required|string',
+            'date' => 'required|date',
+            'start_time' => 'required|date_format:H:i:s',
+            'end_time' => 'required|date_format:H:i:s',
+            'color' => ['required', 'string', 'regex:/^#([0-9a-fA-F]{6})$/'], // validate màu dạng #rrggbb
+        ]);
+
+        $data['student_id'] = $user->student_id;
+
+        $plan = $this->studentService->createStudyPlan($data);
+
+        return response()->json($plan, 201);
+    }
+
+public function deleteStudyPlan($id)
+    {
+        $user = auth()->guard('student')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $this->studentService->deleteStudyPlan((int) $id);
+
+        return response()->json(['message' => 'Study plan deleted successfully.']);
+    }
+
 }
