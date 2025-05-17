@@ -19,7 +19,10 @@ return [
 
 'supports_credentials' => true,
 
-'allowed_origins' => ['http://localhost:3000'], // địa chỉ React
+'allowed_origins' => [
+    'http://localhost:3000',
+    'http://localhost:3001',
+],
 
 'allowed_headers' => ['*'],
 

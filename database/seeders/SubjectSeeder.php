@@ -12,27 +12,27 @@ class SubjectSeeder extends Seeder
     public function run()
     {
         DB::table('subjects')->insert([
-        [
-            'created_at' => now(),
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'img' => 'web-dev.jpg',
-            'name' => 'TOEIC',
-            'teacher_id' => 1,
-        ],
-        [
-            'created_at' => now(),
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'img' => 'database.jpg',
-            'name' => 'Speaking',
-            'teacher_id' => 2,
-        ],
-        [
-            'created_at' => now(),
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-            'img' => 'mobile-app.jpg',
-            'name' => 'IT English',
-            'teacher_id' => 1,
-        ],
-    ]);      
+            [
+                'name' => 'IT English',
+                'description' => 'IT English" is a course that teaches English for IT, focusing on technical terms, communication skills, and technical discussions.',
+                'teacher_id' => 4, 
+                'img' => 'it_english.png',
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'TOEIC',
+                'description' => 'TOEIC is a course that prepares students for the Test of English for International Communication, focusing on improving listening, reading, speaking, and writing skills for a professional environment.',
+                'teacher_id' => 2,  
+                'img' => 'toeic.png',
+                'created_at' => now(),
+            ],
+            [
+                'name' => 'Speaking',
+                'description' => 'The Speaking course focuses on improving verbal communication skills in English, emphasizing pronunciation, fluency, and the ability to engage in everyday and professional conversations.',
+                'teacher_id' => 3,  
+                'img' => 'speaking.png',
+                'created_at' => now(),
+            ],
+        ]);
     }
 }

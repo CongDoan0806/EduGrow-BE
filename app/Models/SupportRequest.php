@@ -11,7 +11,6 @@ class SupportRequest extends Model
 
     protected $table = 'support_requests';
     protected $primaryKey = 'request_id';
-    public $timestamps = false;
 
     protected $fillable = ['student_id', 'teacher_id', 'admin_id', 'message', 'status', 'created_at'];
 

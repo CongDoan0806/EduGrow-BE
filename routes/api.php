@@ -20,6 +20,11 @@ Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'a
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+
+Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
+Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
+Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
+
 Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
 Route::middleware('auth:teacher')->get('teachers/learning-journal/{studentId}', [LearningJournalController::class, 'getLearningJournalByStudent']);
 Route::get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
@@ -33,7 +38,6 @@ Route::middleware('auth:student')->group(function () {
     Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
-
     // Routes mới cho Semester Goal
     Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
     Route::post('/semester-goals', [SemesterGoalController::class, 'createSemesterGoal']);

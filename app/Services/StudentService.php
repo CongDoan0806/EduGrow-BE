@@ -33,7 +33,6 @@ class StudentService
 
         return $student;
     }
-
    
     public function changePassword($student, array $data)
     {
@@ -47,36 +46,11 @@ class StudentService
 
         return $this->studentRepository->changePassword($student, $hashedPassword);
     }
-    public function getAllSubjects()
-    {
-        return $this->studentRepository->getAllSubjects();
-    }
-
-    public function getTodayGoals(Student $student)
-    {
-        return $this->studentRepository->getTodayGoals($student);
-    }
-
-    public function getStudyPlans(int $studentId)
-    {
-        return $this->studentRepository->getStudyPlansByStudent($studentId);
-    }
-
-    public function createStudyPlan(array $data)
-    {
-        return $this->studentRepository->createStudyPlan($data);
-    }
-
-    public function deleteStudyPlan(int $id)
-    {
-        return $this->studentRepository->deleteStudyPlanById($id);
-    }
 
     public function getLearningJournal($studentId, $weekNumber)
     {
         $studentSubjects = $this->studentRepository->getStudentSubjects($studentId);
         $subjectMap = $studentSubjects->pluck('subject.name', 'subject_id')->toArray();
-
 
         $learningJournals = $this->studentRepository->getLearningJournals($studentId, $weekNumber);
 
@@ -132,7 +106,7 @@ class StudentService
 
     public function calculateWeekStartAndEndDate(int $studentId, int $weekNumber): array
     {
-$journals = $this->studentRepository->getJournalsByWeekAndStudent($weekNumber, $studentId);
+        $journals = $this->studentRepository->getJournalsByWeekAndStudent($weekNumber, $studentId);
 
         if ($journals->isNotEmpty()) {
             return [
@@ -205,88 +179,110 @@ $journals = $this->studentRepository->getJournalsByWeekAndStudent($weekNumber, $
                 });
 
                 if (!$existingJournal) {
-                    if (!$existingJournal) {
-                        $existingJournal = $this->studentRepository->createLearningJournal([
-                            'student_subject_id' => $studentSubject->id,
-                            'semester' => $lastSemester,
-                            'week_number' => $weekNumber,
-                            'start_date' => $defaultStartDate,
-                            'end_date' => $defaultEndDate,
-                        ]);
-                        $learningJournals->push($existingJournal);
-                    }
-    
-                    // Kiểm tra ngày học (date) hợp lệ: trong khoảng start_date đến end_date
-                    $lessonDate = Carbon::parse($inClass['date']);
-                    if ($lessonDate->lt(Carbon::parse($existingJournal->start_date)) || $lessonDate->gt(Carbon::parse($existingJournal->end_date))) {
-                        throw new \Exception("Ngày học {$inClass['date']} không thuộc tuần {$weekNumber} ({$existingJournal->start_date} - {$existingJournal->end_date})");
-                    }
-    
-                    $this->studentRepository->createLearningJournalClass([
-                        'learning_journal_id' => $existingJournal->learning_journal_id,
-                        'date' => $inClass['date'],
-                        'my_lesson' => $inClass['my_lesson'],
-                        'self_assessment' => $inClass['self_assessment'],
-                        'difficulties' => $inClass['my_difficulties'],
-                        'plan' => $inClass['my_plan'],
-                        'isSolved' => $inClass['problem_solved'],
+                    $existingJournal = $this->studentRepository->createLearningJournal([
+                        'student_subject_id' => $studentSubject->id,
+                        'semester' => $lastSemester,
+                        'week_number' => $weekNumber,
+                        'start_date' => $defaultStartDate,
+                        'end_date' => $defaultEndDate,
                     ]);
+                    $learningJournals->push($existingJournal);
                 }
+
+                // Kiểm tra ngày học (date) hợp lệ: trong khoảng start_date đến end_date
+                $lessonDate = Carbon::parse($inClass['date']);
+                if ($lessonDate->lt(Carbon::parse($existingJournal->start_date)) || $lessonDate->gt(Carbon::parse($existingJournal->end_date))) {
+                    throw new \Exception("Ngày học {$inClass['date']} không thuộc tuần {$weekNumber} ({$existingJournal->start_date} - {$existingJournal->end_date})");
+                }
+
+                $this->studentRepository->createLearningJournalClass([
+                    'learning_journal_id' => $existingJournal->learning_journal_id,
+                    'date' => $inClass['date'],
+                    'my_lesson' => $inClass['my_lesson'],
+                    'self_assessment' => $inClass['self_assessment'],
+                    'difficulties' => $inClass['my_difficulties'],
+                    'plan' => $inClass['my_plan'],
+                    'isSolved' => $inClass['problem_solved'],
+                ]);
             }
-    
-            // -------- XỬ LÝ SELF-STUDY JOURNALS --------
-            if (!empty($data['self_study']) && is_array($data['self_study'])) {
-                foreach ($data['self_study'] as $selfStudy) {
-                    $skillsModule = $selfStudy['skills_module'];
-                    $studentSubject = $subjectMap[$skillsModule] ?? null;
-    
-                    if (!$studentSubject) {
-                        throw new \Exception('Không tìm thấy student_subject cho môn học: ' . $skillsModule);
-                    }
-    
-                    $existingJournal = $learningJournals->first(function ($journal) use ($studentSubject, $weekNumber) {
-                        return $journal->student_subject_id == $studentSubject->id && $journal->week_number == $weekNumber;
-                    });
-    
-                    if (!$existingJournal) {
-                        $existingJournal = $this->studentRepository->createLearningJournal([
-                            'student_subject_id' => $studentSubject->id,
-                            'semester' => $lastSemester,
-                            'week_number' => $weekNumber,
-                            'start_date' => $defaultStartDate,
-                            'end_date' => $defaultEndDate,
-                        ]);
-                        $learningJournals->push($existingJournal);
-                    }
-    
-                    // Kiểm tra ngày học hợp lệ trong khoảng start_date - end_date
-                    $studyDate = Carbon::parse($selfStudy['date']);
-                    if ($studyDate->lt(Carbon::parse($existingJournal->start_date)) || $studyDate->gt(Carbon::parse($existingJournal->end_date))) {
-                        throw new \Exception("Ngày học {$selfStudy['date']} không thuộc tuần {$weekNumber} ({$existingJournal->start_date} - {$existingJournal->end_date})");
-                    }
-    
-                    $this->studentRepository->createLearningJournalSelf([
-                        'learning_journal_id' => $existingJournal->learning_journal_id,
-                        'date' => $selfStudy['date'],
-                        'my_lesson' => $selfStudy['my_lesson'],
-                        'time_allocation' => $selfStudy['time_allocation'],
-                        'learning_resources' => $selfStudy['learning_resources'],
-                        'learning_activities' => $selfStudy['learning_activities'],
-                        'isConcentration' => $selfStudy['concentration'],
-                        'isFollowPlan' => $selfStudy['plan_follow'],
-                        'evaluation' => $selfStudy['evaluation'],
-                        'reinforcing' => $selfStudy['reinforcing'],
-                        'note' => $selfStudy['notes'],
+        }
+
+        // -------- XỬ LÝ SELF-STUDY JOURNALS --------
+        if (!empty($data['self_study']) && is_array($data['self_study'])) {
+            foreach ($data['self_study'] as $selfStudy) {
+                $skillsModule = $selfStudy['skills_module'];
+                $studentSubject = $subjectMap[$skillsModule] ?? null;
+
+                if (!$studentSubject) {
+                    throw new \Exception('Không tìm thấy student_subject cho môn học: ' . $skillsModule);
+                }
+
+                $existingJournal = $learningJournals->first(function ($journal) use ($studentSubject, $weekNumber) {
+                    return $journal->student_subject_id == $studentSubject->id && $journal->week_number == $weekNumber;
+                });
+
+                if (!$existingJournal) {
+                    $existingJournal = $this->studentRepository->createLearningJournal([
+                        'student_subject_id' => $studentSubject->id,
+                        'semester' => $lastSemester,
+                        'week_number' => $weekNumber,
+                        'start_date' => $defaultStartDate,
+                        'end_date' => $defaultEndDate,
                     ]);
+                    $learningJournals->push($existingJournal);
                 }
+
+                // Kiểm tra ngày học hợp lệ trong khoảng start_date - end_date
+                $studyDate = Carbon::parse($selfStudy['date']);
+                if ($studyDate->lt(Carbon::parse($existingJournal->start_date)) || $studyDate->gt(Carbon::parse($existingJournal->end_date))) {
+                    throw new \Exception("Ngày học {$selfStudy['date']} không thuộc tuần {$weekNumber} ({$existingJournal->start_date} - {$existingJournal->end_date})");
+                }
+
+                $this->studentRepository->createLearningJournalSelf([
+                    'learning_journal_id' => $existingJournal->learning_journal_id,
+                    'date' => $selfStudy['date'],
+                    'my_lesson' => $selfStudy['my_lesson'],
+                    'time_allocation' => $selfStudy['time_allocation'],
+                    'learning_resources' => $selfStudy['learning_resources'],
+                    'learning_activities' => $selfStudy['learning_activities'],
+                    'isConcentration' => $selfStudy['concentration'],
+                    'isFollowPlan' => $selfStudy['plan_follow'],
+                    'evaluation' => $selfStudy['evaluation'],
+                    'reinforcing' => $selfStudy['reinforcing'],
+                    'note' => $selfStudy['notes'],
+                ]);
             }
-    
         }
     }
-    
-        public function getWeekDates(int $studentId, int $weekNumber): array
-        {
-             return $this->calculateWeekStartAndEndDate($studentId, $weekNumber);
-        }
+
+    public function getWeekDates(int $studentId, int $weekNumber): array
+    {
+         return $this->calculateWeekStartAndEndDate($studentId, $weekNumber);
+    }
+
+    public function getAllSubjects()
+    {
+        return $this->studentRepository->getAllSubjects();
+    }
+
+    public function getTodayGoals(Student $student)
+    {
+        return $this->studentRepository->getTodayGoals($student);
+    }
+
+    public function getStudyPlans(int $studentId)
+    {
+        return $this->studentRepository->getStudyPlansByStudent($studentId);
+    }
+
+    public function createStudyPlan(array $data)
+    {
+        return $this->studentRepository->createStudyPlan($data);
+    }
+
+    public function deleteStudyPlan(int $id)
+    {
+        return $this->studentRepository->deleteStudyPlanById($id);
+    }
 }
 

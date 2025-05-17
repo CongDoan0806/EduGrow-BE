@@ -24,8 +24,12 @@ class DatabaseSeeder extends Seeder
             TeacherSeeder::class,
             StudentSeeder::class,
             AdminSeeder::class,
-            StudyPlanSeeder::class,
             SubjectSeeder::class,
+            StudentSubjectSeeder::class,
+            LearningJournalSeeder::class,
+            LearningJournalClassSeeder::class,
+            LearningJournalSelfSeeder::class,
+            StudyPlanSeeder::class,
         ]);
     }
 }

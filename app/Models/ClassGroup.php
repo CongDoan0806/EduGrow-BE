@@ -11,7 +11,6 @@ class ClassGroup extends Model
 
     protected $table = 'class_groups';
     protected $primaryKey = 'class_id';
-    public $timestamps = false;
 
     protected $fillable = ['class_name', 'student_id', 'created_at'];
 

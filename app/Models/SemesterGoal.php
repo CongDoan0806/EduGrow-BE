@@ -10,8 +10,12 @@ class SemesterGoal extends Model
     use HasFactory;
 
     protected $table = 'semester_goals';
+<<<<<<< HEAD
     protected $primaryKey = 'sg_id';
     public $timestamps = false;
+=======
+    protected $primaryKey = 'goal_id';
+>>>>>>> 5e7d3bbf6ea7947c6c20c778083b1627fa945e20
 
     protected $fillable = [
         'student_id',
