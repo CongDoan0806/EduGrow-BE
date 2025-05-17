@@ -33,7 +33,7 @@ class LearningJournalRepository
                 'learning_journal_class.created_at'
             )
             ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'learning_journal_class.learning_journal_id')
-            ->join('student_subject', 'student_subject.id', '=', 'learning_journal.id')
+            ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
             ->join('subjects', 'subjects.subject_id', '=', 'student_subject.subject_id')
             ->where('subjects.teacher_id', $teacherId)
             ->where('student_subject.student_id', $studentId)
@@ -46,7 +46,7 @@ class LearningJournalRepository
     {
         $studentSubjectIds = StudentSubject::where('student_id', $studentId)->pluck('id');
 
-        return LearningJournal::whereIn('id', $studentSubjectIds)
+        return LearningJournal::whereIn('student_subject_id', $studentSubjectIds)
             ->orderBy('week_number', 'desc')
             ->value('week_number');
     }
@@ -68,7 +68,7 @@ class LearningJournalRepository
             'learning_journal_self.created_at'
         )
         ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'learning_journal_self.learning_journal_id')
-        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.id')
+        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
         ->join('subjects', 'subjects.subject_id', '=', 'student_subject.subject_id')
         ->where('subjects.teacher_id', $teacherId)
         ->where('student_subject.student_id', $studentId)
@@ -93,7 +93,7 @@ class LearningJournalRepository
         )
         ->join('tags', 'tags.tag_id', '=', 'tag_replies.tag_id')
         ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'tags.learning_journal_id')
-        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.id')
+        ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
         ->join('students', 'students.student_id', '=', 'student_subject.student_id')
         ->join('subjects', 'subjects.subject_id', '=', 'student_subject.subject_id')
         ->join('teachers', 'teachers.teacher_id', '=', 'subjects.teacher_id')

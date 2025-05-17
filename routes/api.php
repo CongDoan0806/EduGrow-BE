@@ -39,4 +39,8 @@ Route::middleware('auth:student')->group(function () {
     Route::post('/semester-goals', [SemesterGoalController::class, 'createSemesterGoal']);
     Route::put('/semester-goals/content/{goalId}', [SemesterGoalController::class, 'updateGoalContent']);
     Route::get('/subjects', [SemesterGoalController::class, 'getSubjects']);
+
+    Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
+    Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
+    Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
 });
