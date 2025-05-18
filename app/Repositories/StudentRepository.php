@@ -2,12 +2,13 @@
 namespace App\Repositories;
 
 use App\Models\Student;
+use App\Models\Subject;
+use App\Models\Tag;
 use App\Models\StudentSubject;
 use App\Models\LearningJournal;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
 use Illuminate\Support\Facades\DB;
-use App\Models\Subject;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
 
@@ -249,5 +250,59 @@ class StudentRepository
     public function deleteStudyPlanById(int $id)
     {
         return StudyPlan::where('plan_id', $id)->delete();
+    }
+
+    public function fetchSubjectsAndTags($studentId, $weekNumber)
+    {
+        $subjects = Subject::whereHas('studentSubject', function ($q) use ($studentId) {
+            $q->where('student_id', $studentId);
+        })->with('teachers')->get();
+
+        $studentSubjectIds = StudentSubject::where('student_id', $studentId)
+            ->get()
+            ->unique('subject_id')
+            ->pluck('id');
+            
+        $learningJournals = LearningJournal::whereIn('student_subject_id', $studentSubjectIds)
+            ->where('week_number', $weekNumber)
+            ->with(['studentSubject.subject'])
+            ->get()
+            ->map(function ($journal) {
+                return [
+                    'learning_journal_id' => $journal->learning_journal_id,
+                    'student_subject_id' => $journal->student_subject_id,
+                    'subject_id' => optional(optional($journal->studentSubject)->subject)->subject_id,
+                    'week_number' => $journal->week_number,
+                ];
+            });
+
+        $learningJournalIds = $learningJournals->pluck('learning_journal_id');
+
+        $tags = Tag::whereIn('learning_journal_id', $learningJournalIds)
+            ->with(['student', 'teachers'])
+            ->get();
+
+        return [
+            'subjects' => $subjects,
+            'tags' => $tags,
+            'learning_journals' => $learningJournals,
+        ];
+    }
+
+    public function createTag($data)
+    {
+        return Tag::create($data);
+    }
+
+    public function fetchTagsByLearningJournalAndWeek($learningJournalId, $weekNumber)
+    {
+        $learningJournal = LearningJournal::find($learningJournalId);
+        if (!$learningJournal || $learningJournal->week_number != $weekNumber) {
+            return collect(); 
+        }
+
+        return Tag::where('learning_journal_id', $learningJournalId)
+            ->with(['student', 'teachers'])
+            ->get();
     }
 }
