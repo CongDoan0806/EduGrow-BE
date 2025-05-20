@@ -38,3 +38,9 @@ Route::middleware('auth:student')->group(function () {
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);
+    Route::post('/tags', [StudentController::class, 'store']);
+    Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
+});

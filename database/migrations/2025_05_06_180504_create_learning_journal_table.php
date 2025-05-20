@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('semester');
             $table->integer('week_number');
             $table->dateTime('created_at')->useCurrent();
+            $table->dateTime('updated_at')->useCurrent();
             $table->foreign('student_subject_id')->references('id')->on('student_subject')->onDelete('cascade');
         });
     }
