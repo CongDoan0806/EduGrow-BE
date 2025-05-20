@@ -51,4 +51,13 @@ class AdminController extends Controller
         }
     }
 
+    public function getStats()
+    {
+        $data = $this->AdminService->getDashboardStats();
+        return response()->json([
+            'success'=>true,
+            'data'=>$data
+        ]);
+    }
+   
 }
