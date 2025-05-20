@@ -256,4 +256,5 @@ class StudentController extends Controller
 
         return response()->json(['message' => 'Study plan deleted successfully.']);
     }
+
 }

@@ -91,28 +91,6 @@ class StudentRepository
     {
         return LearningJournalClass::create($data);
     }
-
-    public function createLearningJournalSelf(array $data)
-    {
-        return LearningJournalSelf::create($data);
-    }
-
-    /**
-     * Lưu hàng loạt learning journals và các chi tiết class/self study
-     * @param array $classJournals dạng:
-     *   [
-     *     [
-     *       'student_subject_id' => int,
-     *       'semester' => int,
-     *       'week_number' => int,
-     *       'start_date' => date,
-     *       'end_date' => date,
-     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
-     *     ],
-     *     ...
-     *   ]
-     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
-     */
     public function saveLearningJournals(array $classJournals, array $selfStudyJournals)
     {
         DB::beginTransaction();
@@ -250,4 +228,29 @@ class StudentRepository
     {
         return StudyPlan::where('plan_id', $id)->delete();
     }
+    /**
+     * Lấy danh sách LearningJournal của student theo tuần
+     */
+    public function createLearningJournalSelf(array $data)
+    {
+        return LearningJournalSelf::create($data);
+    }
+
+    /**
+     * Lưu hàng loạt learning journals và các chi tiết class/self study
+     * @param array $classJournals dạng:
+     *   [
+     *     [
+     *       'student_subject_id' => int,
+     *       'semester' => int,
+     *       'week_number' => int,
+     *       'start_date' => date,
+     *       'end_date' => date,
+     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
+     *     ],
+     *     ...
+     *   ]
+     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
+     */
+
 }

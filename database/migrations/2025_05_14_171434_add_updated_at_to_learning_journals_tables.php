@@ -14,14 +14,10 @@ return new class extends Migration
         });
 
         // Thêm cột updated_at vào bảng learning_journal_classes
-        Schema::table('learning_journal_class', function (Blueprint $table) {
-            $table->timestamp('updated_at')->nullable()->after('created_at');
-        });
 
         // Thêm cột updated_at vào bảng learning_journal_self
-        Schema::table('learning_journal_self', function (Blueprint $table) {
-            $table->timestamp('updated_at')->nullable()->after('created_at');
-        });
+
+        
     }
 
     /**
@@ -37,13 +33,6 @@ return new class extends Migration
         });
 
         // Xóa cột updated_at khỏi bảng learning_journal_classes
-        Schema::table('learning_journal_class', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
-        });
 
-        // Xóa cột updated_at khỏi bảng learning_journal_self
-        Schema::table('learning_journal_self', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
-        });
     }
 };
