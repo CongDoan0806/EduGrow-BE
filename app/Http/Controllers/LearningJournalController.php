@@ -20,7 +20,7 @@ class LearningJournalController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         $weekNumber = $request->query('week_number');
-        $Classjournals = $this->service->getClassLearningJournalsByStudentAndTeacher($studentId, $user->teacher_id, $weekNumber);
+        $Classjournals = $this->service->getClassLearningJournalsByStudentAndTeacher($studentId, 4, $weekNumber);
         $Selfjournals = $this->service->getSelfLearningJournalsByStudentAndTeacher($studentId, $user->teacher_id, $weekNumber);
 
         return response()->json([

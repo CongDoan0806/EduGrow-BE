@@ -14,7 +14,7 @@ class Subject extends Model
 
      protected $fillable = ['subject_id', 'name', 'description', 'teacher_id', 'img'];
 
-    public function teacher()
+    public function teachers()
     {
         return $this->belongsTo(Teacher::class, 'teacher_id');
     }
@@ -29,4 +29,3 @@ class Subject extends Model
         return $this->hasMany(SemesterGoal::class, 'subject_id');
     }
 }
-

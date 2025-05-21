@@ -48,3 +48,9 @@ Route::middleware('auth:student')->group(function () {
     Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
     Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
 });
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);
+    Route::post('/tags', [StudentController::class, 'store']);
+    Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
+});

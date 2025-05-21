@@ -7,6 +7,7 @@ use Illuminate\Validation\ValidationException;
 use App\Repositories\StudentRepository;
 use Carbon\Carbon;
 
+
 class StudentService
 {
     protected $studentRepository;
@@ -284,5 +285,19 @@ class StudentService
     {
         return $this->studentRepository->deleteStudyPlanById($id);
     }
-}
 
+    public function getSubjectsAndComments($studentId, $weekNumber)
+    {
+        return $this->studentRepository->fetchSubjectsAndTags($studentId, $weekNumber);
+    }
+
+    public function storeTag($data)
+    {
+        return $this->studentRepository->createTag($data);
+    }
+
+    public function getTagsByLearningJournalAndWeek($learningJournalId, $weekNumber)
+    {
+        return $this->studentRepository->fetchTagsByLearningJournalAndWeek($learningJournalId, $weekNumber);
+    }
+}

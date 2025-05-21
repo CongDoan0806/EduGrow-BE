@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Services\StudentService;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Subject;
+use App\Models\LearningJournal;
 
 class StudentController extends Controller
 {
@@ -203,6 +205,22 @@ class StudentController extends Controller
         return response()->json($plans);
     }
 
+    public function getWeekDates($weekNumber)
+    {
+        $user = Auth::guard('student')->user();
+
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $studentId = $user->student_id;
+        
+        // Gọi Service xử lý logic
+        $result = $this->studentService->getWeekDates($studentId, (int)$weekNumber);
+
+        return response()->json($result);
+    }   
+
     public function addStudyPlan(Request $request)
     {
         $user = auth()->guard('student')->user();
@@ -241,19 +259,95 @@ class StudentController extends Controller
         return response()->json(['message' => 'Study plan deleted successfully.']);
     }
 
-    public function getWeekDates($weekNumber)
+     public function getSubjectsAndComments(Request $request)
     {
         $user = Auth::guard('student')->user();
-
         if (!$user) {
             return response()->json(['message' => 'User not authenticated'], 401);
         }
 
         $studentId = $user->student_id;
-        
-        // Gọi Service xử lý logic
-        $result = $this->studentService->getWeekDates($studentId, (int)$weekNumber);
+        $weekNumber = $request->query('week_number');
+        if (!$weekNumber) {
+            return response()->json(['message' => 'week_number is required'], 400);
+        }
 
-        return response()->json($result);
+        $data = $this->studentService->getSubjectsAndComments($studentId, $weekNumber);
+
+        return response()->json($data);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'learning_journal_id' => 'required|exists:learning_journal,learning_journal_id',
+            'teacher_id' => 'required|exists:teachers,teacher_id',
+            'message' => 'required|string',
+        ]);
+
+        $user = Auth::guard('student')->user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $studentId = $user->student_id;
+        $exists = LearningJournal::where('learning_journal_id', $validated['learning_journal_id'])
+            ->whereHas('studentSubject', function ($q) use ($studentId) {
+                $q->where('student_id', $studentId);
+            })->exists();
+
+        if (!$exists) {
+            return response()->json(['message' => 'Invalid learning_journal_id for this student'], 403);
+        }
+
+        $weekNumber = $request->query('week_number');
+        if (!$weekNumber) {
+            return response()->json(['message' => 'week_number is required'], 400);
+        }
+
+        $tagData = array_merge($validated, [
+            'student_id' => $studentId,
+            'created_at' => now(), 
+        ]);
+
+        $savedTag = $this->studentService->storeTag($tagData);
+
+        $tags = $this->studentService->getTagsByLearningJournalAndWeek($validated['learning_journal_id'], $weekNumber);
+
+        return response()->json([
+            'saved_tag' => $savedTag,
+            'all_tags_in_week' => $tags,
+        ]);
+    }
+
+    public function getTeachersBySubject(Request $request)
+    {
+        $user = Auth::guard('student')->user();
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $subjectId = $request->query('subject_id');
+        if (!$subjectId) {
+            return response()->json(['message' => 'subject_id is required'], 400);
+        }
+
+        $subject = Subject::with('teachers')->find($subjectId);
+        if (!$subject) {
+            return response()->json(['message' => 'Subject not found'], 404);
+        }
+
+       $teacher = $subject->teachers;
+
+        if (!$teacher) {
+            return response()->json(['message' => 'Teacher not found for this subject'], 404);
+        }
+
+        $data = [
+            'teacher_id' => $teacher->teacher_id,
+            'name' => $teacher->name,
+        ];
+
+        return response()->json(['teacher' => $data]);
     }
 }
