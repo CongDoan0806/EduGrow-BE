@@ -42,6 +42,7 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
     Route::post('/semester-goals', [SemesterGoalController::class, 'createSemesterGoal']);
     Route::put('/semester-goals/content/{goalId}', [SemesterGoalController::class, 'updateGoalContent']);
+    Route::post('/semester-goals/content', [SemesterGoalController::class, 'addGoalContent']); // Thêm route mới
     Route::get('/subjects', [SemesterGoalController::class, 'getSubjects']);
 
     Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
