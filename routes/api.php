@@ -17,9 +17,12 @@ Route::middleware('auth:sanctum')->get('/admin/dashboard', [AdminController::cla
 Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class, 'showListTeacher']);
 Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
 Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
+
+Route::middleware('auth:sanctum')->post('/admin/add-class', [AdminController::class, 'addClass']);
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+Route::middleware('auth:sanctum')->get('/admin/class',[AdminController::class, 'getAllClasses']);
 
 Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
 Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
@@ -27,7 +30,7 @@ Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'ge
 
 Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
 Route::middleware('auth:teacher')->get('teachers/learning-journal/{studentId}', [LearningJournalController::class, 'getLearningJournalByStudent']);
-Route::get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
+Route::middleware('auth:teacher')->get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
 Route::get('/student/subjects', [StudentController::class, 'showSubjects']);
 
 Route::middleware('auth:student')->group(function () {
@@ -44,4 +47,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);
     Route::post('/tags', [StudentController::class, 'store']);
     Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/Add-user', [AdminController::class, 'add']);
+    Route::get('/admin/student', [AdminController::class, 'showListStudent']);
+    Route::get('/admin/teacher', [AdminController::class, 'showListTeacher']);
+    Route::put('/update-user/{id}', [AdminController::class, 'updateUser']);
+    Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser']);
 });
