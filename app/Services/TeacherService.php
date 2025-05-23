@@ -26,4 +26,7 @@ class TeacherService
     {
         return $this->teacherRepository->createFeedback($data);
     }
+    public function getTags($teacherId){
+        return $this->teacherRepository->getMentionByTeacher($teacherId);
+    }
 }

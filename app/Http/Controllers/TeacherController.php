@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\TeacherService;
-
+use Illuminate\Support\Facades\Auth;
 class TeacherController extends Controller
 {
     protected $teacherService;
@@ -45,5 +45,10 @@ class TeacherController extends Controller
         $feedback = $this->teacherService->createFeedback($validatedData);
 
         return response()->json($feedback, 201);
+    }
+    public function getTags(Request $request)
+    {
+        $tags = $this->teacherService->getTags(auth()->id());
+        return response()->json($tags);
     }
 }
