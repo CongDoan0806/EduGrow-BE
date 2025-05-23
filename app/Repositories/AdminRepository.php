@@ -4,7 +4,10 @@ use App\Models\Student;
 use App\Models\Teacher;
 use App\Models\ClassGroup;
 use App\Models\Tag;
+use App\Models\TagReplies;
+use App\Models\Subject;
 use GuzzleHttp\Psr7\Request;
+use Carbon\Carbon;
 
 class AdminRepository{
     public function getAll(){
@@ -48,27 +51,67 @@ class AdminRepository{
         return Student::count();
     }
 
+    public function countActiveAccounts(string $period): int
+    {
+        $date = match ($period) {
+            'day' => Carbon::now()->subDay(),
+            'week' => Carbon::now()->subWeek(),
+            'month' => Carbon::now()->subMonth(),
+            default => Carbon::now()->subDay(),
+        };
+
+        $studentCount = Student::where('updated_at', '>=', $date)->count();
+        $teacherCount = Teacher::where('updated_at', '>=', $date)->count();
+
+        return $studentCount + $teacherCount;
+    }
+
     public function countClassGroups(): int
     {
         return ClassGroup::distinct('class_id')->count('class_id');
     }
 
-    public function getStudentsPerClass(): array
+    public function countActiveClasses(): array
     {
-        return ClassGroup::select('class_name')
-            ->selectRaw('COUNT(student_id) as student_count')
-            ->groupBy('class_name')
+        $today = Carbon::today();
+
+        $activeCount = Subject::where('end_date', '>=', $today)->distinct('class_id')->count('class_id');
+        $inactiveCount = Subject::where('end_date', '<', $today)->distinct('class_id')->count('class_id');
+
+        return [
+            ['status' => 'Active', 'count' => $activeCount],
+            ['status' => 'Inactive', 'count' => $inactiveCount],
+        ];
+    }
+
+     public function getStudentsPerClass(): array
+    {
+        return ClassGroup::withCount('student')  
+            ->get(['class_id', 'class_name', 'student_count']) 
+            ->map(function ($classGroup) {
+                return [
+                    'class_id' => $classGroup->class_id,
+                    'class_name' => $classGroup->class_name,
+                    'student_count' => $classGroup->student_count, 
+                ];
+            })
+            ->toArray();
+    }
+
+    public function getWeeklyTagCounts(): array
+    {
+        return Tag::selectRaw("WEEK(created_at) as week_number, COUNT(*) as tag_count")
+            ->groupBy('week_number')
+            ->orderBy('week_number')
             ->get()
             ->toArray();
     }
 
-    public function getTopTaggedTeachers(int $limit = 3): array
+    public function getDailyReplyCountsFromTeachers(): array
     {
-        return Tag::selectRaw('teachers.teacher_id, teachers.name, teachers.image, COUNT(tags.tag_id) as total_tags')
-            ->join('teachers', 'tags.teacher_id', '=', 'teachers.teacher_id')
-            ->groupBy('teachers.teacher_id', 'teachers.name', 'teachers.image')
-            ->orderByDesc('total_tags')
-            ->limit($limit)
+        return TagReplies::selectRaw("DATE(created_at) as reply_date, COUNT(*) as reply_count")
+            ->groupBy('reply_date')
+            ->orderBy('reply_date')
             ->get()
             ->toArray();
     }

@@ -12,10 +12,10 @@ class ClassGroup extends Model
     protected $table = 'class_groups';
     protected $primaryKey = 'class_id';
 
-    protected $fillable = ['class_name', 'student_id', 'created_at'];
+    protected $fillable = ['class_name', 'created_at'];
 
     public function student()
     {
-        return $this->belongsTo(Student::class, 'student_id');
+        return $this->hasMany(Student::class, 'class_id');
     }
 }
