@@ -19,5 +19,31 @@ class AdminService{
     {
         return $this->adminRepository->addUser($data);
     }
+    public function updateUser($id, $data)
+    {
+        if (!empty($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        } else {
+            unset($data['password']); 
+        }
 
+
+    return $this->adminRepository->update($id, $data);
+    }
+    public function deleteUser($id, $role)
+    {
+        return $this->adminRepository->deleteUser($id, $role);
+    }
+
+
+    
+    public function getAllClasses(){
+        return $this->adminRepository->getAllClasses();
+    }
+
+    public function createClass(array $data)
+    {
+        return $this->adminRepository->createClass($data);
+    }
 }
+

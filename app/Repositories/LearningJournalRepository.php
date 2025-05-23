@@ -6,7 +6,9 @@ use App\Models\LearningJournal;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
 use App\Models\StudentSubject;
+use App\Models\Subject;
 use App\Models\TagReplies;
+use Illuminate\Support\Facades\DB;
 
 class LearningJournalRepository
 {
@@ -24,6 +26,8 @@ class LearningJournalRepository
                 'subjects.name as subject_name',
                 'learning_journal.learning_journal_id',
                 'learning_journal.created_at as journal_created_at',
+                'learning_journal.start_date',
+                'learning_journal.end_date',
                 'learning_journal_class.my_lesson',
                 'learning_journal_class.self_assessment',
                 'learning_journal_class.difficulties',
@@ -46,7 +50,7 @@ class LearningJournalRepository
     {
         $studentSubjectIds = StudentSubject::where('student_id', $studentId)->pluck('id');
 
-        return LearningJournal::whereIn('student_subject_id', $studentSubjectIds)
+        return LearningJournal::whereIn('learning_journal_id', $studentSubjectIds)
             ->orderBy('week_number', 'desc')
             ->value('week_number');
     }
@@ -77,9 +81,10 @@ class LearningJournalRepository
         ->get();
 }
 
-    public function getTagByLearningJournalId($id)
+ public function getTagByLearningJournalId($id)
 {
-    return TagReplies::select(
+    return DB::table('tags')
+        ->select(
             'tags.tag_id',
             'students.name as student_name',
             'students.avatar as student_avatar',
@@ -91,7 +96,7 @@ class LearningJournalRepository
             'tag_replies.content',
             'tag_replies.created_at as reply_created_at'
         )
-        ->join('tags', 'tags.tag_id', '=', 'tag_replies.tag_id')
+        ->leftJoin('tag_replies', 'tag_replies.tag_id', '=', 'tags.tag_id')
         ->join('learning_journal', 'learning_journal.learning_journal_id', '=', 'tags.learning_journal_id')
         ->join('student_subject', 'student_subject.id', '=', 'learning_journal.student_subject_id')
         ->join('students', 'students.student_id', '=', 'student_subject.student_id')
@@ -100,6 +105,7 @@ class LearningJournalRepository
         ->where('learning_journal.learning_journal_id', $id)
         ->get();
 }
+
     public function getAllLearningJournals()
     {
         return $this->model->all();
@@ -133,4 +139,5 @@ class LearningJournalRepository
         }
         return false;
     }
+
 }
