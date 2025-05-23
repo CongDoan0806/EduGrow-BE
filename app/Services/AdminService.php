@@ -34,4 +34,16 @@ class AdminService{
     {
         return $this->adminRepository->deleteUser($id, $role);
     }
+
+
+    
+    public function getAllClasses(){
+        return $this->adminRepository->getAllClasses();
+    }
+
+    public function createClass(array $data)
+    {
+        return $this->adminRepository->createClass($data);
+    }
 }
+
