@@ -135,7 +135,7 @@ class StudentService
         ];
     }
 
-     public function saveLearningJournal($studentId, $data)
+    public function saveLearningJournal($studentId, $data)
     {
         $weekNumber = $data['week_number'];
         $learningJournals = $this->studentRepository->getLearningJournals($studentId, $weekNumber);

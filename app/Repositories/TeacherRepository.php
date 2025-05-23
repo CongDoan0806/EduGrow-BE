@@ -32,6 +32,12 @@ class TeacherRepository
     {
         return TagReplies::create($data);
     }
+    public function getMentionByTeacher($teacherId){
+        return Tag::with('student')
+        ->where('teacher_id',$teacherId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
 
     public function getTeacherWithSubjects($teacherId)
     {
@@ -39,5 +45,4 @@ class TeacherRepository
             $query->withCount('studentSubject');
         }])->find($teacherId);
     }
-
 }

@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-     public function up(): void
+    public function up(): void
     {
         Schema::table('learning_journal_class', function (Blueprint $table) {
             $table->date('date')->nullable()->after('learning_journal_id');

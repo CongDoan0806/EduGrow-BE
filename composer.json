@@ -7,12 +7,15 @@
     "require": {
         "php": "^8.0.2",
         "barryvdh/laravel-cors": "^3.0",
+        "beyondcode/laravel-websockets": "^1.14",
         "cloudinary-labs/cloudinary-laravel": "^2.1",
+        "doctrine/dbal": "^4.2",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.7",
-        "propaganistas/laravel-phone": "^5.1"
+        "propaganistas/laravel-phone": "^5.1",
+        "pusher/pusher-php-server": "^7.2"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

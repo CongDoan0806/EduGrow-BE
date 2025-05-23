@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\TeacherService;
-
+use Illuminate\Support\Facades\Auth;
 class TeacherController extends Controller
 {
     protected $teacherService;
@@ -46,6 +46,11 @@ class TeacherController extends Controller
 
         return response()->json($feedback, 201);
     }
+    public function getTags(Request $request)
+    {
+        $tags = $this->teacherService->getTags(auth()->id());
+        return response()->json($tags);
+    }
  public function dashboard(Request $request)
     {
         $teacher = auth()->guard('teacher')->user();
@@ -58,9 +63,7 @@ class TeacherController extends Controller
             $data = $this->teacherService->getDashboardData($teacher->teacher_id);
             return response()->json(['success' => true, 'data' => $data]);
         } catch (\Exception $e) {
-            \Log::error('Dashboard error: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
 }
-
 }

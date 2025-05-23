@@ -20,6 +20,7 @@ class VerifyCsrfToken extends Middleware
         'api/profile',
         'api/changePassword',
         'api/study-plans',
-       '/api/study-plans/*'
-    ];
+        '/api/study-plans/*',
+        'api/teacher/tags'
+        ];
 }

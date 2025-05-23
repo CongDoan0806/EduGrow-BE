@@ -1,6 +1,7 @@
 import _ from 'lodash';
 window._ = _;
-
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
  * to our Laravel back-end. This library automatically handles sending the
@@ -11,7 +12,15 @@ import axios from 'axios';
 window.axios = axios;
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
+window.pusher = Pusher;
+window.Echo = new Echo({
+    broadcaster: 'pusher',
+    key: 'your-app-key', // Có thể đặt bất kỳ giá trị, ví dụ: 'laravel-websockets'
+    wsHost: window.location.hostname,
+    wsPort: 6001,
+    forceTLS: false,
+    disableStats: true,
+});
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
