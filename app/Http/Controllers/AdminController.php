@@ -50,5 +50,44 @@ class AdminController extends Controller
             ], 400);
         }
     }
+   public function updateUser(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'sometimes|required|string',
+            'email' => [
+                'sometimes',
+                'required',
+                'email',
+                "unique:students,email,$id,student_id",
+            ],
+            'phone' => 'sometimes|string',
+            'class_name' => 'nullable|string',
+            'subject' => 'nullable|string',
+            'password' => 'nullable|string',
+            'role' => 'required|in:student,teacher'
+        ]);
+
+        try {
+            $user = $this->AdminService->updateUser($id, $validated);
+            return response()->json(['success' => true, 'data' => $user]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
+
+    public function deleteUser($id, Request $request)
+    {
+        $validated = $request->validate([
+            'role' => 'required|in:student,teacher'
+        ]);
+
+        try {
+            $this->AdminService->deleteUser($id, $validated['role']);
+            return response()->json(['success' => true, 'message' => 'User deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+        }
+    }
 
 }
+

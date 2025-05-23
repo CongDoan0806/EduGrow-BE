@@ -35,4 +35,35 @@ class AdminRepository{
 
         throw new \Exception("Invalid role");
     }
+   public function update($id, array $data)
+    {
+
+        if ($data['role'] === 'student') {
+            $student = Student::where('student_id', $id)->firstOrFail();
+            $student->update($data);
+            return $student;
+        }
+
+        if ($data['role'] === 'teacher') {
+            $teacher = Teacher::where('teacher_id', $id)->firstOrFail();
+            $teacher->update($data);
+            return $teacher;
+        }
+
+        throw new \Exception("Invalid role for update");
+    }
+
+
+    public function deleteUser($id, $role)
+        {
+            if ($role === 'student') {
+                $student = Student::findOrFail($id);
+                $student->delete();
+            } elseif ($role === 'teacher') {
+                $teacher = Teacher::findOrFail($id);
+                $teacher->delete();
+            } else {
+                throw new \Exception("Invalid role");
+            }
+        }
 }
