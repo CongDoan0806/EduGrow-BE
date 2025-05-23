@@ -13,6 +13,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->get('/admin/dashboard', [AdminController::class, 'getStats']);
+Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class, 'showListTeacher']);
+Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
+Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
 
 Route::middleware('auth:sanctum')->post('/admin/add-class', [AdminController::class, 'addClass']);
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);

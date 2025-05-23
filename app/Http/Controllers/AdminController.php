@@ -132,6 +132,15 @@ class AdminController extends Controller
         return response()->json(['message' => 'Class created successfully']);
     }
 
+    public function getStats()
+    {
+        $data = $this->AdminService->getDashboardStats();
+        return response()->json([
+            'success'=>true,
+            'data'=>$data
+        ]);
+    }
+   
 }
 
 

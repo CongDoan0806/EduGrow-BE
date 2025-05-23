@@ -13,6 +13,7 @@ class Teacher extends Authenticatable
 
     protected $table = 'teachers';
     protected $primaryKey = 'teacher_id';
+    public $timestamps = true;
     protected $fillable = [
         'name',
         'email',

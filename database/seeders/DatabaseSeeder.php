@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             LearningJournalClassSeeder::class,
             LearningJournalSelfSeeder::class,
             StudyPlanSeeder::class,
+            ClassGroupSeeder::class,
         ]);
     }
 }
