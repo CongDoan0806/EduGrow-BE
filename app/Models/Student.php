@@ -11,6 +11,7 @@ class Student extends Authenticatable
     use HasFactory, HasApiTokens;
     protected $table = 'students';
     protected $primaryKey = 'student_id';
+    public $timestamps = true;
 
     protected $fillable = [
         'name',
@@ -26,7 +27,7 @@ class Student extends Authenticatable
 
     public function classGroup()
     {
-        return $this->hasOne(ClassGroup::class, 'student_id');
+        return $this->belongsTo(ClassGroup::class, 'class_id', 'class_id');
     }
 
     public function studentSubject()
