@@ -51,4 +51,19 @@ class TeacherController extends Controller
         $tags = $this->teacherService->getTags(auth()->id());
         return response()->json($tags);
     }
+ public function dashboard(Request $request)
+    {
+        $teacher = auth()->guard('teacher')->user();
+
+        if (!$teacher) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        try {
+            $data = $this->teacherService->getDashboardData($teacher->teacher_id);
+            return response()->json(['success' => true, 'data' => $data]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+}
 }

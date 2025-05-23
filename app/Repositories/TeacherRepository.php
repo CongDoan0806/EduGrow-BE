@@ -38,4 +38,11 @@ class TeacherRepository
         ->orderBy('created_at', 'desc')
         ->get();
     }
+
+    public function getTeacherWithSubjects($teacherId)
+    {
+        return Teacher::with(['subjects' => function($query) {
+            $query->withCount('studentSubject');
+        }])->find($teacherId);
+    }
 }

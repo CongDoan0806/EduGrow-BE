@@ -12,8 +12,7 @@ class TagReplies extends Model
     protected $primaryKey = 'reply_id';
     protected $fillable = [
         'tag_id',
-        'sender_type',
-        'sender_id',
+        'teacher_id',
         'content',
     ];
 }

@@ -13,6 +13,7 @@ class Teacher extends Authenticatable
 
     protected $table = 'teachers';
     protected $primaryKey = 'teacher_id';
+    public $timestamps = true;
     protected $fillable = [
         'name',
         'email',
@@ -33,7 +34,7 @@ class Teacher extends Authenticatable
         'remember_token',
     ];
 
-    public function subject()
+    public function subjects()
     {
         return $this->hasMany(Subject::class, 'teacher_id');
     }
