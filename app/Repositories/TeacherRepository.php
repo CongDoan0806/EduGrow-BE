@@ -32,4 +32,12 @@ class TeacherRepository
     {
         return TagReplies::create($data);
     }
+
+    public function getTeacherWithSubjects($teacherId)
+    {
+        return Teacher::with(['subjects' => function($query) {
+            $query->withCount('studentSubject');
+        }])->find($teacherId);
+    }
+
 }

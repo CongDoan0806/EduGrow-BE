@@ -26,4 +26,31 @@ class TeacherService
     {
         return $this->teacherRepository->createFeedback($data);
     }
+
+   public function getDashboardData($teacherId)
+    {
+        $teacher = $this->teacherRepository->getTeacherWithSubjects($teacherId);
+
+        if (!$teacher) {
+            throw new \Exception("Teacher not found");
+        }
+
+        $subjects = $teacher->subjects;
+
+        // Debug log:
+        \Log::info('Subjects:', $subjects->toArray());
+
+        return [
+            'class_count' => $subjects->count(),
+            'student_count' => $subjects->sum(function ($subject) {
+                return $subject->student_subject_count ?? 0;
+            }),
+            'subjects' => $subjects,
+        ];
+    }
+
+
+
+
+
 }

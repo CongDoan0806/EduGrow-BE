@@ -47,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);
     Route::post('/tags', [StudentController::class, 'store']);
     Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
+    
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -55,4 +56,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/teacher', [AdminController::class, 'showListTeacher']);
     Route::put('/update-user/{id}', [AdminController::class, 'updateUser']);
     Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser']);
+});
+
+Route::middleware(['auth:teacher'])->group(function () {
+    Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard']);
 });
