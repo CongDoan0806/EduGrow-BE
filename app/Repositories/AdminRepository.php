@@ -73,12 +73,12 @@ class AdminRepository{
         return ClassGroup::distinct('class_id')->count('class_id');
     }
 
-    public function countActiveClasses(): array
+    public function countActiveSubjects(): array
     {
         $today = Carbon::today();
 
-        $activeCount = Subject::where('end_date', '>=', $today)->distinct('class_id')->count('class_id');
-        $inactiveCount = Subject::where('end_date', '<', $today)->distinct('class_id')->count('class_id');
+        $activeCount = Subject::where('end_date', '>=', $today)->count();
+        $inactiveCount = Subject::where('end_date', '<', $today)->count();
 
         return [
             ['status' => 'Active', 'count' => $activeCount],

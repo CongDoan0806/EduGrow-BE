@@ -8,9 +8,9 @@ use App\Models\StudentSubject;
 use App\Models\LearningJournal;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
-use Illuminate\Support\Facades\DB;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class StudentRepository
 {
@@ -50,6 +50,71 @@ class StudentRepository
         return $student;
     }
 
+    public function createLearningJournal(array $data)
+    {
+        return LearningJournal::create($data);
+    }
+
+    public function createLearningJournalClass(array $data)
+    {
+        return LearningJournalClass::create($data);
+    }
+
+    public function createLearningJournalSelf(array $data)
+    {
+        return LearningJournalSelf::create($data);
+    }
+
+    /**
+     * Lưu hàng loạt learning journals và các chi tiết class/self study
+     * @param array $classJournals dạng:
+     *   [
+     *     [
+     *       'student_subject_id' => int,
+     *       'semester' => int,
+     *       'week_number' => int,
+     *       'start_date' => date,
+     *       'end_date' => date,
+     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
+     *     ],
+     *     ...
+     *   ]
+     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
+     */
+
+    public function getAllSubjects()
+    {
+        return Subject::all();
+    }
+
+    public function getTodayGoals(Student $student)
+    {
+        $today = Carbon::today();
+        
+        return StudyPlan::where('student_id', $student->student_id)
+            ->whereDate('date', $today)
+            ->orderBy('start_time')
+            ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date']);
+    }
+
+    public function getStudyPlansByStudent($studentId)
+    {
+        return StudyPlan::where('student_id', $studentId)
+            ->orderBy('date')
+            ->orderBy('start_time')
+            ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date', 'color']);
+    }
+
+    public function createStudyPlan(array $data)
+    {
+        return StudyPlan::create($data);
+    }
+
+    public function deleteStudyPlanById(int $id)
+    {
+        return StudyPlan::where('plan_id', $id)->delete();
+    }
+
     /**
      * Lấy danh sách LearningJournal của student theo tuần
      */
@@ -83,15 +148,6 @@ class StudentRepository
             ->get();
     }
 
-    public function createLearningJournal(array $data)
-    {
-        return LearningJournal::create($data);
-    }
-
-    public function createLearningJournalClass(array $data)
-    {
-        return LearningJournalClass::create($data);
-    }
     public function saveLearningJournals(array $classJournals, array $selfStudyJournals)
     {
         DB::beginTransaction();
@@ -175,6 +231,7 @@ class StudentRepository
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
+            // \Log::error('Error saving journals: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -197,45 +254,11 @@ class StudentRepository
         ->first();
     }
 
-    public function getAllSubjects()
-    {
-        return Subject::all();
-    }
 
-    public function getTodayGoals(Student $student)
-    {
-        $today = Carbon::today();
-        
-        return StudyPlan::where('student_id', $student->student_id)
-            ->whereDate('date', $today)
-            ->orderBy('start_time')
-            ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date']);
-    }
-
-    public function getStudyPlansByStudent($studentId)
-    {
-        return StudyPlan::where('student_id', $studentId)
-            ->orderBy('date')
-            ->orderBy('start_time')
-            ->get(['plan_id as id', 'title', 'start_time', 'end_time', 'date', 'color']);
-    }
-
-    public function createStudyPlan(array $data)
-    {
-        return StudyPlan::create($data);
-    }
-
-    public function deleteStudyPlanById(int $id)
-    {
-        return StudyPlan::where('plan_id', $id)->delete();
-    }
     /**
      * Lấy danh sách LearningJournal của student theo tuần
      */
-    public function createLearningJournalSelf(array $data)
-    {
-        return LearningJournalSelf::create($data);
-    }
+
 
     /**
      * Lưu hàng loạt learning journals và các chi tiết class/self study
