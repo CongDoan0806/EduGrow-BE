@@ -254,6 +254,30 @@ class StudentRepository
         ->first();
     }
 
+
+    /**
+     * Lấy danh sách LearningJournal của student theo tuần
+     */
+
+
+    /**
+     * Lưu hàng loạt learning journals và các chi tiết class/self study
+     * @param array $classJournals dạng:
+     *   [
+     *     [
+     *       'student_subject_id' => int,
+     *       'semester' => int,
+     *       'week_number' => int,
+     *       'start_date' => date,
+     *       'end_date' => date,
+     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
+     *     ],
+     *     ...
+     *   ]
+     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
+     */
+
+
     public function fetchSubjectsAndTags($studentId, $weekNumber)
     {
         $subjects = Subject::whereHas('studentSubject', function ($q) use ($studentId) {

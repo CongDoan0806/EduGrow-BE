@@ -64,6 +64,11 @@ return [
         'null' => [
             'driver' => 'null',
         ],
+        'websocket'=>[
+            'driver'=>'websocket',
+            'host'=> env('WEBSOCKETS_HOST', '127.0.0.1'),
+            'port'=>env('WEBSOCKETS_PORT', 6001)
+        ]
 
     ],
 

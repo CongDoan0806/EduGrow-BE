@@ -258,7 +258,6 @@ class StudentController extends Controller
 
         return response()->json(['message' => 'Study plan deleted successfully.']);
     }
-
      public function getSubjectsAndComments(Request $request)
     {
         $user = Auth::guard('student')->user();

@@ -6,11 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::create('learning_journal_self', function (Blueprint $table) {
@@ -27,17 +22,11 @@ return new class extends Migration
             $table->string('note', 250);
             $table->timestamps();
             $table->foreign('learning_journal_id')
-                  ->references('learning_journal_id')
-                  ->on('learning_journal')
-                  ->onDelete('cascade');
+                    ->references('learning_journal_id')
+                    ->on('learning_journal')
+                    ->onDelete('cascade');
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::dropIfExists('learning_journal_self');

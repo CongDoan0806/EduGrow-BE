@@ -34,7 +34,7 @@ class Teacher extends Authenticatable
         'remember_token',
     ];
 
-    public function subject()
+    public function subjects()
     {
         return $this->hasMany(Subject::class, 'teacher_id');
     }

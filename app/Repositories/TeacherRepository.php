@@ -32,4 +32,17 @@ class TeacherRepository
     {
         return TagReplies::create($data);
     }
+    public function getMentionByTeacher($teacherId){
+        return Tag::with('student')
+        ->where('teacher_id',$teacherId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+
+    public function getTeacherWithSubjects($teacherId)
+    {
+        return Teacher::with(['subjects' => function($query) {
+            $query->withCount('studentSubject');
+        }])->find($teacherId);
+    }
 }
