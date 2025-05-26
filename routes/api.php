@@ -49,6 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
     
 });
+// routes/api.php
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/teacher/tags', [TeacherController::class, 'getTags']);
+});
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/Add-user', [AdminController::class, 'add']);

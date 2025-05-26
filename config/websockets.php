@@ -22,17 +22,17 @@ return [
      * messages to each other via the webSockets.
      */
     'apps' => [
-        [
-            'id' => env('PUSHER_APP_ID'),
-            'name' => env('APP_NAME'),
-            'key' => env('PUSHER_APP_KEY'),
-            'secret' => env('PUSHER_APP_SECRET'),
-            'path' => env('PUSHER_APP_PATH'),
-            'capacity' => null,
-            'enable_client_messages' => false,
-            'enable_statistics' => true,
-        ],
+    [
+        'id' => env('PUSHER_APP_ID', '1996123'),
+        'name' => env('PUSHER_APP_NAME', 'mt1'),
+        'key' => env('PUSHER_APP_KEY', '44b6b94450d22ad99799'),
+        'secret' => env('PUSHER_APP_SECRET', '4575024678e83d1d74e2'),
+        'path' => env('PUSHER_APP_PATH', '/'),
+        'capacity' => null,
+        'enable_client_messages' => false,
+        'enable_statistics' => true,
     ],
+],
 
     /*
      * This class is responsible for finding the apps. The default provider

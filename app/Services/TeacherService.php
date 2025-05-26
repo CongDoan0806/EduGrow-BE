@@ -26,6 +26,9 @@ class TeacherService
     {
         return $this->teacherRepository->createFeedback($data);
     }
+    public function getTags($teacherId){
+        return $this->teacherRepository->getMentionByTeacher($teacherId);
+    }
 
    public function getDashboardData($teacherId)
     {
@@ -36,10 +39,6 @@ class TeacherService
         }
 
         $subjects = $teacher->subjects;
-
-        // Debug log:
-        \Log::info('Subjects:', $subjects->toArray());
-
         return [
             'class_count' => $subjects->count(),
             'student_count' => $subjects->sum(function ($subject) {
@@ -48,9 +47,5 @@ class TeacherService
             'subjects' => $subjects,
         ];
     }
-
-
-
-
 
 }
