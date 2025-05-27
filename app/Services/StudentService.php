@@ -300,4 +300,14 @@ class StudentService
     {
         return $this->studentRepository->fetchTagsByLearningJournalAndWeek($learningJournalId, $weekNumber);
     }
+
+    public function uploadAchievement(array $data)
+    {
+        return $this->studentRepository->uploadAchievement($data);
+    }
+
+    public function getAchievementsByStudent($studentId)
+    {
+        return $this->studentRepository->getAchievementByStudentId($studentId);
+    }
 }

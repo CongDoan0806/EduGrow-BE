@@ -349,4 +349,66 @@ class StudentController extends Controller
 
         return response()->json(['teacher' => $data]);
     }
+
+    public function uploadAchievement(Request $request)
+    {
+        $data = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'date_achieved' => 'required|date',
+            'file' => 'nullable|file|image|max:5120',
+        ]);
+
+        $filePath = null;
+
+        if ($request->hasFile('file')) {
+            $uploadedFile = $request->file('file');
+
+            $filePath = Cloudinary::upload($uploadedFile->getRealPath(), [
+                'folder' => 'achievements',
+                'public_id' => uniqid('achievement_'),
+                'overwrite' => true,
+            ])->getSecurePath();
+        }
+
+        $student = auth('student')->user();
+
+        $achievement = $this->studentService->uploadAchievement([
+            'student_id' => $student->student_id,
+            'title' => $data['title'],
+            'description' => $data['description'] ?? null,
+            'file_path' => $filePath,
+            'date_achieved' => $data['date_achieved'],
+            'uploaded_at' => now(),
+        ]);
+
+        return response()->json([
+            'message' => 'Achievement uploaded successfully.',
+            'data' => $achievement,
+        ], 201);
+    }
+
+    public function getAchievements(Request $request)
+    {
+        $student = auth('student')->user();
+
+        if (!$student) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $achievements = $this->studentService->getAchievementsByStudent($student->student_id);
+
+        return response()->json([
+            'achievements' => $achievements->map(function ($achievement) {
+                return [
+                    'achievement_id' => $achievement->achievement_id,
+                    'title' => $achievement->title,
+                    'description' => $achievement->description,
+                    'file_path' => $achievement->file_path,
+                    'date_achieved' => $achievement->date_achieved,
+                ];
+            }),
+        ]);
+    }
 }
+

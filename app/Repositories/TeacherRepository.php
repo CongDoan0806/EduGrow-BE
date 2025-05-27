@@ -9,6 +9,7 @@ use App\Models\Teacher;
 use App\Models\Subject;
 use App\Models\Student;
 
+
 class TeacherRepository
 {
     protected $model;
@@ -30,10 +31,27 @@ class TeacherRepository
             ->where('teacher_id', $id)
             ->first();
     }
+
+    public function getClassesByTeacherId($teacherId)
+    {
+        return Subject::where('teacher_id', $teacherId)
+            ->get()
+            ->map(function ($subject) {
+                return [
+                    'class_id' => $subject->subject_id, 
+                    'subject_name' => $subject->subject_name,
+                    'subject_img' => $subject->image_url,
+                    'description' => $subject->description,
+                    'student_count' => $subject->studentSubject()->count()
+                ];
+            });
+    }
+
     public function createFeedback(array $data)
     {
         return TagReplies::create($data);
     }
+
     public function getMentionByTeacher($teacherId){
         return Tag::with('student')
         ->where('teacher_id',$teacherId)
