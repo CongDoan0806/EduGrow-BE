@@ -125,4 +125,17 @@ class SemesterGoalService
             throw $e;
         }
     }
+    public function getSemesterGoalsByStudentId($studentId, $subjectId){
+        return $this->semesterGoalRepository->getSemesterGoalsByStudentId($studentId, $subjectId);
+    }
+
+    public function setDeadlineByGoalId($goalId, $deadline)
+    {
+        return $this->semesterGoalRepository->setDeadlineByGoalId($goalId, $deadline);
+    }
+
+    public function setFeedbackByGoalId($goalId, $feedback)
+    {
+        return $this->semesterGoalRepository->setFeedbackByGoalId($goalId, $feedback);
+    }
 }
