@@ -48,4 +48,21 @@ class TeacherService
         ];
     }
 
+  public function getStudentsBySubject($teacherId, $subjectId = null)
+{
+    if ($subjectId) {
+        return $this->teacherRepository->getStudentsBySubject($teacherId, $subjectId);
+    } else {
+        return $this->teacherRepository->getAllStudentsByTeacher($teacherId);
+    }
+}
+
+
+    public function getSubjectsByTeacher($teacherId)
+    {
+        return $this->teacherRepository->getSubjectsByTeacher($teacherId);
+    }
+
+
+
 }

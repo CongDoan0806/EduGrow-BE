@@ -15,17 +15,15 @@ return new class extends Migration
     {
         Schema::dropIfExists('semester_goals'); // <- thêm dòng này
         Schema::create('semester_goals', function (Blueprint $table) {
-            $table->id('goal_id');
+            $table->id('sg_id');
             $table->unsignedBigInteger('student_id');
-            $table->unsignedBigInteger('subject_id');  
-            $table->string('title');
+            $table->unsignedBigInteger('subject_id');
             $table->string('semester');
-            $table->text('description')->nullable();
-            $table->string('status');
             $table->date('deadline');
             $table->dateTime('created_at')->useCurrent();
+            
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
-            $table->foreign('subject_id')->references('subject_id')->on('subjects')->onDelete('cascade'); 
+            $table->foreign('subject_id')->references('subject_id')->on('subjects')->onDelete('cascade');
         });
     }
 

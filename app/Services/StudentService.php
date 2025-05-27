@@ -301,4 +301,3 @@ class StudentService
         return $this->studentRepository->fetchTagsByLearningJournalAndWeek($learningJournalId, $weekNumber);
     }
 }
-

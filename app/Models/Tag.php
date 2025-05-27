@@ -35,4 +35,3 @@ class Tag extends Model
     //     return $this->hasMany(TagReply::class, 'tag_id');
     // }
 }
-
