@@ -31,6 +31,27 @@ class TeacherController extends Controller
         return response()->json($teacher);
     }
 
+    public function getTeacherClasses(Request $request)
+    {
+        try {
+            $teacher = auth()->guard('teacher')->user();
+            if (!$teacher) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            }
+
+            $classes = $this->teacherService->getClassesByTeacherId($teacher->teacher_id);
+            return response()->json([
+                'success' => true,
+                'classes' => $classes
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching classes: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function createFeedback(Request $request)
     {
         $user = auth()->guard('teacher')->user();

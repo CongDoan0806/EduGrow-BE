@@ -56,7 +56,6 @@ class AdminService{
             'active_accounts_weekly' => $this->adminRepository->countActiveAccounts('week'),
             'active_accounts_monthly' => $this->adminRepository->countActiveAccounts('month'),
             'total_classes' => $this->adminRepository->countClassGroups(),
-            // 'active_classes' => $this->adminRepository->countActiveClasses(),
             'active_subjects' => $this->adminRepository->countActiveSubjects(),
             'students_per_class' => $this->adminRepository->getStudentsPerClass(),
             'weekly_tag_counts' => $this->adminRepository->getWeeklyTagCounts(),

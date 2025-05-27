@@ -29,4 +29,3 @@ class Subject extends Model
         return $this->hasMany(SemesterGoal::class, 'subject_id');
     }
 }
-
