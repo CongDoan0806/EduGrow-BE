@@ -44,6 +44,8 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/profile', [StudentController::class, 'showInfo']);
     Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
+    Route::post('/achievements/uploadAchievement', [studentController::class, 'uploadAchievement']);
+    Route::get('/achievements/showAchievement', [studentController::class, 'getAchievements']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
     // Routes mới cho Semester Goal
     Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
