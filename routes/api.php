@@ -23,6 +23,9 @@ Route::middleware('auth:sanctum')->post('/admin/add-class', [AdminController::cl
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+Route::middleware('auth:sanctum')->get('/teachers/student-goal/{studentId}', [SemesterGoalController::class, 'getSemesterGoalsByStudentId']);
+Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/deadline', [SemesterGoalController::class, 'setDeadlineByGoalId']);
+Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/feedback', [SemesterGoalController::class, 'setFeedbackByGoalId']);
 Route::middleware('auth:sanctum')->get('/admin/class',[AdminController::class, 'getAllClasses']);
 
 Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
