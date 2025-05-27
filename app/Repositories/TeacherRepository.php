@@ -39,6 +39,9 @@ class TeacherRepository
         ->get();
     }
 
+    public function getNotificationByTeacher($teacherId){
+        return;
+    }
     public function getTeacherWithSubjects($teacherId)
     {
         return Teacher::with(['subjects' => function($query) {

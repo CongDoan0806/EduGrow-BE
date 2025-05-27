@@ -21,7 +21,9 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
         $this->call([
+            ClassGroupSeeder::class,
             StudentSeeder::class,
+            AdminSeeder::class,
             TeacherSeeder::class,
             SubjectSeeder::class,
             StudentSubjectSeeder::class,
@@ -29,7 +31,7 @@ class DatabaseSeeder extends Seeder
             LearningJournalClassSeeder::class,
             LearningJournalSelfSeeder::class,
             StudyPlanSeeder::class,
-            ClassGroupSeeder::class,
+            
         ]);
     }
 }
