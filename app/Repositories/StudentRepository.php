@@ -8,6 +8,7 @@ use App\Models\StudentSubject;
 use App\Models\LearningJournal;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
+use App\Models\Achievement;
 use Illuminate\Support\Facades\DB;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
@@ -306,6 +307,18 @@ class StudentRepository
 
         return Tag::where('learning_journal_id', $learningJournalId)
             ->with(['student', 'teachers'])
+            ->get();
+    }
+
+    public function uploadAchievement(array $data)
+    {
+        return Achievement::create($data);
+    }
+
+    public function getAchievementByStudentId($studentId)
+    {
+        return Achievement::where('student_id', $studentId)
+            ->orderBy('date_achieved', 'desc')
             ->get();
     }
 }
