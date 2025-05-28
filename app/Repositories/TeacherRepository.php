@@ -7,6 +7,8 @@ use App\Models\Tag;
 use App\Models\TagReplies;
 use App\Models\Teacher;
 use App\Models\Subject;
+use App\Models\Student;
+
 
 class TeacherRepository
 {
@@ -62,5 +64,39 @@ class TeacherRepository
         return Teacher::with(['subjects' => function($query) {
             $query->withCount('studentSubject');
         }])->find($teacherId);
+    }
+
+      public function getStudentsBySubject($teacherId, $subjectId)
+    {
+        $subject = Subject::where('teacher_id', $teacherId)
+            ->where('subject_id', $subjectId)
+            ->first();
+
+        if (!$subject) {
+            return null;
+        }
+
+        return Student::whereHas('studentSubject', function ($query) use ($subjectId) {
+            $query->where('subject_id', $subjectId);
+        })
+            ->with(['studentSubject' => function ($query) use ($subjectId) {
+                $query->where('subject_id', $subjectId);
+            }])
+            ->get();
+    }
+
+  public function getAllStudentsByTeacher($teacherId)
+{
+    return Student::whereHas('studentSubject.subject', function ($query) use ($teacherId) {
+        $query->where('teacher_id', $teacherId);
+    })->get();
+}
+
+
+    public function getSubjectsByTeacher($teacherId)
+    {
+        return Subject::where('teacher_id', $teacherId)
+            ->select('subject_id as id', 'name')
+            ->get();
     }
 }

@@ -81,5 +81,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(['auth:teacher'])->group(function () {
     Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard']);
+   Route::get('/teacher/students-by-subject', [TeacherController::class, 'getStudentsBySubject']);
+    Route::get('/teacher/subjects', [TeacherController::class, 'getSubjects']);
     Route::get('/teacher/classes', [TeacherController::class, 'getTeacherClasses']);
 });
