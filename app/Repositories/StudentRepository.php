@@ -6,6 +6,7 @@ use App\Models\Subject;
 use App\Models\Tag;
 use App\Models\StudentSubject;
 use App\Models\LearningJournal;
+use App\Models\Notification;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
 use App\Models\StudyPlan;
@@ -65,23 +66,6 @@ class StudentRepository
         return LearningJournalSelf::create($data);
     }
 
-    /**
-     * Lưu hàng loạt learning journals và các chi tiết class/self study
-     * @param array $classJournals dạng:
-     *   [
-     *     [
-     *       'student_subject_id' => int,
-     *       'semester' => int,
-     *       'week_number' => int,
-     *       'start_date' => date,
-     *       'end_date' => date,
-     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
-     *     ],
-     *     ...
-     *   ]
-     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
-     */
-
     public function getAllSubjects()
     {
         return Subject::all();
@@ -114,10 +98,6 @@ class StudentRepository
     {
         return StudyPlan::where('plan_id', $id)->delete();
     }
-
-    /**
-     * Lấy danh sách LearningJournal của student theo tuần
-     */
     public function getLearningJournals($studentId, $weekNumber)
     {
         return LearningJournal::with(['learningJournalClass', 'learningJournalSelf'])
@@ -231,7 +211,6 @@ class StudentRepository
             DB::commit();
         } catch (\Exception $e) {
             DB::rollBack();
-            // \Log::error('Error saving journals: ' . $e->getMessage());
             throw $e;
         }
     }
@@ -253,30 +232,6 @@ class StudentRepository
         ->orderByDesc('week_number')
         ->first();
     }
-
-
-    /**
-     * Lấy danh sách LearningJournal của student theo tuần
-     */
-
-
-    /**
-     * Lưu hàng loạt learning journals và các chi tiết class/self study
-     * @param array $classJournals dạng:
-     *   [
-     *     [
-     *       'student_subject_id' => int,
-     *       'semester' => int,
-     *       'week_number' => int,
-     *       'start_date' => date,
-     *       'end_date' => date,
-     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
-     *     ],
-     *     ...
-     *   ]
-     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
-     */
-
 
     public function fetchSubjectsAndTags($studentId, $weekNumber)
     {
@@ -331,7 +286,18 @@ class StudentRepository
             ->with(['student', 'teachers'])
             ->get();
     }
-    public function getNotificationStudent($studentId){
-        return ;
+    protected $model;
+    public function __construct(Notification $notification)
+    {
+        $this->model = $notification;
+    }
+    public function getNotificationStudent($studentId)
+    {
+        return $this->model
+            ->with('teacher')
+            ->where('student_id', $studentId)
+            ->orWhereNull('student_id')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }

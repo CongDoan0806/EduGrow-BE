@@ -300,4 +300,7 @@ class StudentService
     {
         return $this->studentRepository->fetchTagsByLearningJournalAndWeek($learningJournalId, $weekNumber);
     }
+    public function getNotificationByStudent($studentId){
+        return $this->studentRepository->getNotificationStudent($studentId);
+    }
 }

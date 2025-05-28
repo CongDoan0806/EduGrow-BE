@@ -349,4 +349,14 @@ class StudentController extends Controller
 
         return response()->json(['teacher' => $data]);
     }
+    public function getNotifications()
+    {
+        $student = Auth::guard('student')->user();
+        if (!$student) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $notifications = $this->studentService->getNotificationByStudent($student->id);
+        return response()->json($notifications);
+    }
 }

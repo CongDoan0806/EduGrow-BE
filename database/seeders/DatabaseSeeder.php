@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
             LearningJournalClassSeeder::class,
             LearningJournalSelfSeeder::class,
             StudyPlanSeeder::class,
-            
+            NotificationSeeder::class,
         ]);
     }
 }

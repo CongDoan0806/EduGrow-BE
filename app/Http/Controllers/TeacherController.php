@@ -51,7 +51,7 @@ class TeacherController extends Controller
         $tags = $this->teacherService->getTags(auth()->id());
         return response()->json($tags);
     }
- public function dashboard(Request $request)
+    public function dashboard(Request $request)
     {
         $teacher = auth()->guard('teacher')->user();
 
@@ -65,5 +65,13 @@ class TeacherController extends Controller
         } catch (\Exception $e) {
             return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
         }
-}
+    }
+    public function getNotification(){
+        $teacher = Auth::guard('teacher')->user();
+        if (!$teacher){
+            return response()->json(['message'=>'Unauthorized'], 401);
+        }
+        $notification = $this->teacherService->getNotificationByTeacher($teacher->id);
+        return response()->json($notification); 
+    }
 }

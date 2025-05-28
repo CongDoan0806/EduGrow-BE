@@ -6,6 +6,7 @@ use App\Models\LearningJournalClass;
 use App\Models\Tag;
 use App\Models\TagReplies;
 use App\Models\Teacher;
+use  App\Models\Notification;
 
 class TeacherRepository
 {
@@ -39,8 +40,16 @@ class TeacherRepository
         ->get();
     }
 
-    public function getNotificationByTeacher($teacherId){
-        return;
+    public function getNotificationsByTeacher($teacherId)
+    {
+        return Notification::with('student')
+            ->where('teacher_id', $teacherId)
+            ->orWhere(function ($query) use ($teacherId) {
+                $query->whereNull('student_id')
+                      ->where('teacher_id', $teacherId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
     public function getTeacherWithSubjects($teacherId)
     {
@@ -48,4 +57,5 @@ class TeacherRepository
             $query->withCount('studentSubject');
         }])->find($teacherId);
     }
+
 }

@@ -47,5 +47,7 @@ class TeacherService
             'subjects' => $subjects,
         ];
     }
-
+    public function getNotificationByTeacher($teacherId){
+        return $this->teacherRepository->getNotificationsByTeacher($teacherId);
+    }
 }
