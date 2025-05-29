@@ -22,12 +22,19 @@ class TeacherService
     {
         return $this->teacherRepository->getTeacherById($id);
     }
+
     public function createFeedback(array $data)
     {
         return $this->teacherRepository->createFeedback($data);
     }
+    
     public function getTags($teacherId){
         return $this->teacherRepository->getMentionByTeacher($teacherId);
+    }
+
+    public function getClassesByTeacherId($teacherId)
+    {
+        return $this->teacherRepository->getClassesByTeacherId($teacherId);
     }
 
    public function getDashboardData($teacherId)
@@ -49,5 +56,20 @@ class TeacherService
     }
     public function getNotificationByTeacher($teacherId){
         return $this->teacherRepository->getNotificationsByTeacher($teacherId);
+    }
+
+  public function getStudentsBySubject($teacherId, $subjectId = null)
+{
+    if ($subjectId) {
+        return $this->teacherRepository->getStudentsBySubject($teacherId, $subjectId);
+    } else {
+        return $this->teacherRepository->getAllStudentsByTeacher($teacherId);
+    }
+}
+
+
+    public function getSubjectsByTeacher($teacherId)
+    {
+        return $this->teacherRepository->getSubjectsByTeacher($teacherId);
     }
 }

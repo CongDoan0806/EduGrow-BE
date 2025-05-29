@@ -153,4 +153,80 @@ class SemesterGoalController extends Controller
         ], 500);
     }
 }
+    public function getSemesterGoalsByStudentId(Request $request, $studentId)
+    {
+       $teacherId = auth()->guard('teacher')->id();
+        if (!$teacherId) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        try {
+            $goals = $this->semesterGoalService->getSemesterGoalsByStudentId($studentId, $teacherId);
+            return response()->json([
+                'success' => true,
+                'data' => $goals
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Lỗi khi lấy semester goals của học sinh: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi lấy dữ liệu',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+    }
+
+    public function setDeadlineByGoalId(Request $request, $goalId)
+    {
+        try {
+            $user = auth()->guard('teacher')->user();
+            if (!$user) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+            $validated = $request->validate([
+                'deadline' => 'required',
+            ]);
+
+            $goalContent = $this->semesterGoalService->setDeadlineByGoalId($goalId, $validated['deadline']);
+
+            return response()->json([
+                'success' => true,
+                'data' => $goalContent
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Lỗi khi cập nhật deadline: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi cập nhật deadline',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function setFeedbackByGoalId(Request $request, $goalId){
+        try {
+            $user = auth()->guard('teacher')->user();
+            if (!$user) {
+                return response()->json(['message' => 'Unauthorized'], 401);
+            }
+            $validated = $request->validate([
+                'feedback' => 'required|string',
+            ]);
+
+            $goalContent = $this->semesterGoalService->setFeedbackByGoalId($goalId, $validated['feedback']);
+
+            return response()->json([
+                'success' => true,
+                'data' => $goalContent
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Lỗi khi cập nhật phản hồi: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi cập nhật phản hồi',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

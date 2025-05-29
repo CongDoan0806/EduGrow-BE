@@ -25,6 +25,7 @@ return new class extends Migration
             $table->unsignedBigInteger('reply_id')->nullable(); 
             $table->boolean('is_read')->default(false);
             $table->timestamps();
+            $table->enum('recipient_role',['student','teacher'])->nullable();
             
             $table->foreign('student_id')->references('student_id')->on('students')->onDelete('cascade');
             $table->foreign('teacher_id')->references('teacher_id')->on('teachers')->onDelete('cascade');

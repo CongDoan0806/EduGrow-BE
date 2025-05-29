@@ -23,6 +23,9 @@ Route::middleware('auth:sanctum')->post('/admin/add-class', [AdminController::cl
 Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
 Route::get('/teachers', [TeacherController::class, 'index']);
 Route::get('/teachers/{id}', [TeacherController::class, 'show']);
+Route::middleware('auth:sanctum')->get('/teachers/student-goal/{studentId}', [SemesterGoalController::class, 'getSemesterGoalsByStudentId']);
+Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/deadline', [SemesterGoalController::class, 'setDeadlineByGoalId']);
+Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/feedback', [SemesterGoalController::class, 'setFeedbackByGoalId']);
 Route::middleware('auth:sanctum')->get('/admin/class',[AdminController::class, 'getAllClasses']);
 
 Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
@@ -41,6 +44,8 @@ Route::middleware('auth:student')->group(function () {
     Route::get('/profile', [StudentController::class, 'showInfo']);
     Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
     Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
+    Route::post('/achievements/uploadAchievement', [studentController::class, 'uploadAchievement']);
+    Route::get('/achievements/showAchievement', [studentController::class, 'getAchievements']);
     Route::put('/changePassword', [StudentController::class, 'changePassword']);
     // Routes mới cho Semester Goal
     Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
@@ -80,5 +85,9 @@ Route::middleware(['auth:teacher'])->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/teacher/notification', [TeacherController::class, 'getNotification']);
 
-    Route::get('/student/notifications', [StudentController::class, 'getNotifications']);
+    
+    Route::get('/teacher/students-by-subject', [TeacherController::class, 'getStudentsBySubject']);
+    Route::get('/teacher/subjects', [TeacherController::class, 'getSubjects']);
+    Route::get('/teacher/classes', [TeacherController::class, 'getTeacherClasses']);
 });
+Route::get('/student/notifications', [StudentController::class, 'getNotifications']);

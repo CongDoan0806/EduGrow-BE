@@ -303,4 +303,14 @@ class StudentService
     public function getNotificationByStudent($studentId){
         return $this->studentRepository->getNotificationStudent($studentId);
     }
+
+    public function uploadAchievement(array $data)
+    {
+        return $this->studentRepository->uploadAchievement($data);
+    }
+
+    public function getAchievementsByStudent($studentId)
+    {
+        return $this->studentRepository->getAchievementByStudentId($studentId);
+    }
 }

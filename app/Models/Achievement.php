@@ -13,7 +13,7 @@ class Achievement extends Model
     protected $primaryKey = 'achievement_id';
     public $timestamps = false;
 
-    protected $fillable = ['student_id','title','description','file_path','uploaded_at'];
+    protected $fillable = ['student_id','title','description','file_path', 'date_achieved','uploaded_at'];
 
     public function student()
     {

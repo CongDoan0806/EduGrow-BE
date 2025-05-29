@@ -18,7 +18,8 @@ class Notification extends Model
         'goal_id',
         'tag_id',
         'reply_id',
-        'is_read'
+        'is_read',
+        'recipient_role',
     ];
 
     protected $casts = [
@@ -58,7 +59,6 @@ class Notification extends Model
         return $this->belongsTo(TagReplies::class, 'reply_id');
     }
 
-    // Scopes để lọc theo loại notification
     public function scopeGoalNotifications($query)
     {
         return $query->whereIn('type', ['goal_created', 'goal_updated']);

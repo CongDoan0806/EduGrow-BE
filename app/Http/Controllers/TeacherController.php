@@ -31,6 +31,27 @@ class TeacherController extends Controller
         return response()->json($teacher);
     }
 
+    public function getTeacherClasses(Request $request)
+    {
+        try {
+            $teacher = auth()->guard('teacher')->user();
+            if (!$teacher) {
+                return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+            }
+
+            $classes = $this->teacherService->getClassesByTeacherId($teacher->teacher_id);
+            return response()->json([
+                'success' => true,
+                'classes' => $classes
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error fetching classes: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function createFeedback(Request $request)
     {
         $user = auth()->guard('teacher')->user();
@@ -74,4 +95,43 @@ class TeacherController extends Controller
         $notification = $this->teacherService->getNotificationByTeacher($teacher->id);
         return response()->json($notification); 
     }
+
+ public function getStudentsBySubject(Request $request)
+{
+    $teacher = auth()->guard('teacher')->user();
+
+    if (!$teacher) {
+        return response()->json(['success' => false, 'message' => 'Unauthorized'], 401);
+    }
+
+    $subjectId = $request->query('subject_id');
+
+    if ($subjectId) {
+        $students = $this->teacherService->getStudentsBySubject($teacher->teacher_id, $subjectId);
+    } else {
+        $students = $this->teacherService->getStudentsBySubject($teacher->teacher_id);
+    }
+
+    return response()->json(['success' => true, 'data' => $students]);
 }
+
+    
+
+    public function getSubjects(Request $request)
+    {
+        $teacher = auth()->guard('teacher')->user();
+        if (!$teacher) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $subjects = $this->teacherService->getSubjectsByTeacher($teacher->teacher_id);
+
+        return response()->json([
+            'success' => true,
+            'data' => $subjects
+        ]);
+    }
+}
+
+    
+

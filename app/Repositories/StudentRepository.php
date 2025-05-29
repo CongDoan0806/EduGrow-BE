@@ -9,9 +9,10 @@ use App\Models\LearningJournal;
 use App\Models\Notification;
 use App\Models\LearningJournalClass;
 use App\Models\LearningJournalSelf;
+use App\Models\Achievement;
+use Illuminate\Support\Facades\DB;
 use App\Models\StudyPlan;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 
 class StudentRepository
 {
@@ -293,11 +294,20 @@ class StudentRepository
     }
     public function getNotificationStudent($studentId)
     {
-        return $this->model
-            ->with('teacher')
-            ->where('student_id', $studentId)
-            ->orWhereNull('student_id')
-            ->orderBy('created_at', 'desc')
+        return Notification::where('recipient_role', 'student')
+        ->where('student_id', $studentId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+    }
+    public function uploadAchievement(array $data)
+    {
+        return Achievement::create($data);
+    }
+
+    public function getAchievementByStudentId($studentId)
+    {
+        return Achievement::where('student_id', $studentId)
+            ->orderBy('date_achieved', 'desc')
             ->get();
     }
 }

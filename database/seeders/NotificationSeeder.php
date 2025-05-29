@@ -17,7 +17,7 @@ class NotificationSeeder extends Seeder
     {
         DB::table('notifications')->insert([
             [
-                'id' => 9,
+                'id' => 1,
                 'type' => 'goal_created',
                 'message' => "Sinh viên Tran Cong Doan đã tạo mục tiêu mới: 'Speaking influence' cho môn ",
                 'student_id' => 1,
@@ -29,9 +29,10 @@ class NotificationSeeder extends Seeder
                 'is_read' => false,
                 'created_at' => '2025-05-26 19:32:45',
                 'updated_at' => '2025-05-26 19:32:45',
+                'recipient_role'=>'student',
             ],
             [
-                'id' => 10,
+                'id' => 2,
                 'type' => 'goal_updated',
                 'message' => "Sinh viên Tran Cong Doan đã cập nhật mục tiêu: 'Get 9 points' cho môn ",
                 'student_id' => 1,
@@ -43,9 +44,10 @@ class NotificationSeeder extends Seeder
                 'is_read' => false,
                 'created_at' => '2025-05-26 19:34:30',
                 'updated_at' => '2025-05-26 19:34:30',
+                'recipient_role'=>'teacher',
             ],
             [
-                'id' => 11,
+                'id' => 3,
                 'type' => 'goal_updated',
                 'message' => "Sinh viên Tran Cong Doan đã cập nhật mục tiêu: 'Complete all assignments on time' cho môn ",
                 'student_id' => 1,
@@ -57,6 +59,7 @@ class NotificationSeeder extends Seeder
                 'is_read' => false,
                 'created_at' => '2025-05-26 19:56:46',
                 'updated_at' => '2025-05-26 19:56:46',
+                'recipient_role'=>'student',
             ],
         ]);
     }
