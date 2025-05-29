@@ -62,7 +62,7 @@ class TeacherController extends Controller
             'tag_id' => 'required|integer|exists:tags,tag_id',
             'content' => 'required|string|max:255',
         ]);
-
+        $validatedData['teacher_id'] = $user->teacher_id;
         $feedback = $this->teacherService->createFeedback($validatedData);
 
         return response()->json($feedback, 201);
