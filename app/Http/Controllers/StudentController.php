@@ -8,6 +8,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use App\Services\StudentService;
 use App\Models\Subject;
 use App\Models\LearningJournal;
+use App\Models\Notification;
 
 class StudentController extends Controller
 {
@@ -360,6 +361,23 @@ class StudentController extends Controller
         $notifications = $this->studentService->getNotificationByStudent($studentId);
 
         return response()->json($notifications);
+    }
+
+    public function markNotificationsAsRead(Request $request)
+    {
+        $studentId = $request->user()->id; 
+        $notificationIds = $request->input('notification_ids');
+
+        if (!$notificationIds || !is_array($notificationIds)) {
+            return response()->json(['error' => 'notification_ids is required and must be an array'], 400);
+        }
+
+        Notification::where('recipient_role', 'student')
+            ->where('student_id', $studentId)
+            ->whereIn('id', $notificationIds)
+            ->update(['is_read' => true]);
+
+        return response()->json(['message' => 'Notifications marked as read']);
     }
 
 

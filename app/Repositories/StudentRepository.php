@@ -295,10 +295,13 @@ class StudentRepository
     public function getNotificationStudent($studentId)
     {
         return Notification::where('recipient_role', 'student')
-        ->where('student_id', $studentId)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('student_id', $studentId)
+            ->orderBy('is_read') 
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
+
+
     public function uploadAchievement(array $data)
     {
         return Achievement::create($data);

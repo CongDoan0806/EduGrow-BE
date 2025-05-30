@@ -28,16 +28,13 @@ class TeacherService
         return $this->teacherRepository->createFeedback($data);
     }
     
-    public function getTags($teacherId){
-        return $this->teacherRepository->getMentionByTeacher($teacherId);
-    }
-
+    
     public function getClassesByTeacherId($teacherId)
     {
         return $this->teacherRepository->getClassesByTeacherId($teacherId);
     }
 
-   public function getDashboardData($teacherId)
+    public function getDashboardData($teacherId)
     {
         $teacher = $this->teacherRepository->getTeacherWithSubjects($teacherId);
 
@@ -54,22 +51,48 @@ class TeacherService
             'subjects' => $subjects,
         ];
     }
-    public function getNotificationByTeacher($teacherId){
-        return $this->teacherRepository->getNotificationsByTeacher($teacherId);
-    }
 
-  public function getStudentsBySubject($teacherId, $subjectId = null)
-{
-    if ($subjectId) {
-        return $this->teacherRepository->getStudentsBySubject($teacherId, $subjectId);
-    } else {
-        return $this->teacherRepository->getAllStudentsByTeacher($teacherId);
+    public function getStudentsBySubject($teacherId, $subjectId = null)
+    {
+        if ($subjectId) {
+            return $this->teacherRepository->getStudentsBySubject($teacherId, $subjectId);
+        } else {
+            return $this->teacherRepository->getAllStudentsByTeacher($teacherId);
+        }
     }
-}
 
 
     public function getSubjectsByTeacher($teacherId)
     {
         return $this->teacherRepository->getSubjectsByTeacher($teacherId);
     }
+    public function getCombinedNotifications($teacherId)
+    {
+        $tags = $this->teacherRepository->getMentionByTeacher($teacherId)
+            ->map(function ($tag) {
+                return [
+                    'id' => $tag->id,
+                    'message' => $tag->message,
+                    'student' => $tag->student,
+                    'type' => 'tag',
+                    'created_at' => $tag->created_at,
+                    'is_read' => $tag->is_read,
+                ];
+            });
+
+        $notifications = $this->teacherRepository->getNotificationTeacher($teacherId)
+            ->map(function ($noti) {
+                return [
+                    'id' => $noti->id,
+                    'message' => $noti->message,
+                    'type' => 'notification',
+                    'created_at' => $noti->created_at,
+                    'is_read' => $noti->is_read,
+                ];
+            });
+
+        return $tags->merge($notifications)->sortByDesc('created_at')->values();
+    }
+
+
 }

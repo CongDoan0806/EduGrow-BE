@@ -90,4 +90,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/teacher/subjects', [TeacherController::class, 'getSubjects']);
     Route::get('/teacher/classes', [TeacherController::class, 'getTeacherClasses']);
 });
-Route::get('/student/notifications', [StudentController::class, 'getNotifications']);
+Route::middleware('auth:sanctum')->get('/student/notifications', [StudentController::class, 'getNotifications']);
+Route::post('/student/notifications/mark-read', [StudentController::class, 'markNotificationsAsRead'])
+    ->middleware('auth:api');
+
+Route::get('/teacher/combined-notifications', [TeacherController::class, 'getCombinedNotifications']);
+Route::post('/teacher/notifications/mark-read', [TeacherController::class, 'markNotificationRead'])
+    ->middleware('auth:api');

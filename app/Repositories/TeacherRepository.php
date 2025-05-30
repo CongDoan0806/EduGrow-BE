@@ -52,22 +52,17 @@ class TeacherRepository
         return TagReplies::create($data);
     }
 
-    public function getMentionByTeacher($teacherId){
+    public function getMentionByTeacher($teacherId)
+    {
         return Tag::with('student')
-        ->where('teacher_id',$teacherId)
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('teacher_id', $teacherId)
+            ->get();
     }
 
-    public function getNotificationsByTeacher($teacherId)
+    public function getNotificationTeacher($teacherId)
     {
-        return Notification::with('student')
+        return Notification::where('recipient_role', 'teacher')
             ->where('teacher_id', $teacherId)
-            ->orWhere(function ($query) use ($teacherId) {
-                $query->whereNull('student_id')
-                      ->where('teacher_id', $teacherId);
-            })
-            ->orderBy('created_at', 'desc')
             ->get();
     }
     public function getTeacherWithSubjects($teacherId)
@@ -76,7 +71,7 @@ class TeacherRepository
             $query->withCount('studentSubject');
         }])->find($teacherId);
     }
-      public function getStudentsBySubject($teacherId, $subjectId)
+    public function getStudentsBySubject($teacherId, $subjectId)
     {
         $subject = Subject::where('teacher_id', $teacherId)
             ->where('subject_id', $subjectId)
@@ -95,12 +90,12 @@ class TeacherRepository
             ->get();
     }
 
-  public function getAllStudentsByTeacher($teacherId)
-{
-    return Student::whereHas('studentSubject.subject', function ($query) use ($teacherId) {
-        $query->where('teacher_id', $teacherId);
-    })->get();
-}
+    public function getAllStudentsByTeacher($teacherId)
+    {
+        return Student::whereHas('studentSubject.subject', function ($query) use ($teacherId) {
+            $query->where('teacher_id', $teacherId);
+        })->get();
+    }
 
 
     public function getSubjectsByTeacher($teacherId)
@@ -109,4 +104,5 @@ class TeacherRepository
             ->select('subject_id as id', 'name')
             ->get();
     }
+    
 }
