@@ -12,76 +12,63 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('/login', [AuthController::class, 'login'])->name('login');
-Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
-Route::middleware('auth:sanctum')->get('/admin/dashboard', [AdminController::class, 'getStats']);
-Route::middleware('auth:sanctum')->get('/admin/teacher',[AdminController::class, 'showListTeacher']);
-Route::middleware('auth:sanctum')->get('/admin/student',[AdminController::class, 'showListStudent']);
-Route::middleware('auth:sanctum')->post('/Add-user', [AdminController::class, 'add']);
 
-Route::middleware('auth:sanctum')->post('/admin/add-class', [AdminController::class, 'addClass']);
-Route::middleware('auth:sanctum')->get('/goals', [StudentController::class, 'getTodayGoals']);
-Route::get('/teachers', [TeacherController::class, 'index']);
-Route::get('/teachers/{id}', [TeacherController::class, 'show']);
-Route::middleware('auth:sanctum')->get('/teachers/student-goal/{studentId}', [SemesterGoalController::class, 'getSemesterGoalsByStudentId']);
-Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/deadline', [SemesterGoalController::class, 'setDeadlineByGoalId']);
-Route::middleware('auth:teacher')->put('teachers/student-goal/{goalId}/feedback', [SemesterGoalController::class, 'setFeedbackByGoalId']);
-Route::middleware('auth:sanctum')->get('/admin/class',[AdminController::class, 'getAllClasses']);
+Route::post('/auth/login', [AuthController::class, 'login'])->name('login');
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/auth/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::post('/auth/logout', [AuthController::class, 'logout']);
+});
 
-Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
-Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
-Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
+Route::middleware(['auth:sanctum'])->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'getStats']);
+    Route::post('/users', [AdminController::class, 'add']);
+    Route::put('/users/{id}', [AdminController::class, 'updateUser']);
+    Route::delete('/users/{id}', [AdminController::class, 'deleteUser']);
+    Route::get('/teachers', [AdminController::class, 'showListTeacher']);
+    Route::get('/students', [AdminController::class, 'showListStudent']);
+    Route::get('/classes', [AdminController::class, 'getAllClasses']);
+    Route::post('/classes', [AdminController::class, 'addClass']);
+});
 
-Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
-Route::middleware('auth:teacher')->get('teachers/learning-journal/{studentId}', [LearningJournalController::class, 'getLearningJournalByStudent']);
-Route::middleware('auth:teacher')->get('/teachers/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
-Route::get('/student/subjects', [StudentController::class, 'showSubjects']);
+Route::middleware(['auth:sanctum'])->prefix('teacher')->group(function () {
+    Route::get('/dashboard', [TeacherController::class, 'dashboard']);
+    Route::get('/classes', [TeacherController::class, 'getTeacherClasses']);
+    Route::get('/subjects', [TeacherController::class, 'getSubjects']);
+    Route::get('/students-by-subject', [TeacherController::class, 'getStudentsBySubject']);
+    Route::post('/feedback', [TeacherController::class, 'createFeedback']);
+    Route::get('/tags', [TeacherController::class, 'getTags']);
+    Route::get('/students/{studentId}/semester-goals', [SemesterGoalController::class, 'getSemesterGoalsByStudentId']);
+    Route::put('/semester-goals/{goalId}/deadline', [SemesterGoalController::class, 'setDeadlineByGoalId']);
+    Route::put('/semester-goals/{goalId}/feedback', [SemesterGoalController::class, 'setFeedbackByGoalId']);
+    Route::get('/students/{studentId}/learning-journals', [LearningJournalController::class, 'getLearningJournalByStudent']);
+    Route::get('/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
+    Route::get('/', [TeacherController::class, 'index']);//
+    Route::get('/teachers/{id}', [TeacherController::class, 'show']); //
+});
 
-Route::middleware('auth:student')->group(function () {
+Route::middleware(['auth:sanctum'])->prefix('students')->group(function () {
+    Route::get('/profile', [StudentController::class, 'showInfo']);
+    Route::put('/profile/info', [StudentController::class, 'updateTextInfo']);
+    Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
+    Route::put('/profile/password', [StudentController::class, 'changePassword']);
     Route::get('/study-plans', [StudentController::class, 'getStudyPlans']);
     Route::post('/study-plans', [StudentController::class, 'addStudyPlan']);
     Route::delete('/study-plans/{id}', [StudentController::class, 'deleteStudyPlan']);
-    Route::get('/profile', [StudentController::class, 'showInfo']);
-    Route::put('/profile/text', [StudentController::class, 'updateTextInfo']);
-    Route::post('/profile/avatar', [StudentController::class, 'uploadAvatar']);
-    Route::post('/achievements/uploadAchievement', [studentController::class, 'uploadAchievement']);
-    Route::get('/achievements/showAchievement', [studentController::class, 'getAchievements']);
-    Route::put('/changePassword', [StudentController::class, 'changePassword']);
-    // Routes mới cho Semester Goal
+    Route::get('/goals/today', [StudentController::class, 'getTodayGoals']);
     Route::get('/semester-goals', [SemesterGoalController::class, 'getSemesterGoals']);
     Route::post('/semester-goals', [SemesterGoalController::class, 'createSemesterGoal']);
     Route::put('/semester-goals/content/{goalId}', [SemesterGoalController::class, 'updateGoalContent']);
-    Route::post('/semester-goals/content', [SemesterGoalController::class, 'addGoalContent']); // Thêm route mới
-    Route::get('/subjects', [SemesterGoalController::class, 'getSubjects']);
-
-    Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
-    Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
-    Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);
+    Route::post('/semester-goals/content', [SemesterGoalController::class, 'addGoalContent']);
+    Route::get('/achievements', [StudentController::class, 'getAchievements']);
+    Route::post('/achievements', [StudentController::class, 'uploadAchievement']);
+    Route::get('/learning-journals', [StudentController::class, 'getLearningJournal']);
+    Route::post('/learning-journals', [StudentController::class, 'saveLearningJournal']);
+    Route::get('/subjects', [StudentController::class, 'showSubjects']);//
+    Route::get('/semester/subjects', [SemesterGoalController::class, 'getSubjects']); //
+    Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);//
+    Route::get('/tag/subjects-comments', [StudentController::class, 'getSubjectsAndComments']);//
     Route::post('/tags', [StudentController::class, 'store']);
     Route::get('/tag/teachers', [StudentController::class, 'getTeachersBySubject']);
-    
-});
-// routes/api.php
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/teacher/tags', [TeacherController::class, 'getTags']);
-});
-
-Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/Add-user', [AdminController::class, 'add']);
-    Route::get('/admin/student', [AdminController::class, 'showListStudent']);
-    Route::get('/admin/teacher', [AdminController::class, 'showListTeacher']);
-    Route::put('/update-user/{id}', [AdminController::class, 'updateUser']);
-    Route::delete('/delete-user/{id}', [AdminController::class, 'deleteUser']);
-});
-
-Route::middleware(['auth:teacher'])->group(function () {
-    Route::get('/teacher/dashboard', [TeacherController::class, 'dashboard']);
-   Route::get('/teacher/students-by-subject', [TeacherController::class, 'getStudentsBySubject']);
-    Route::get('/teacher/subjects', [TeacherController::class, 'getSubjects']);
-    Route::get('/teacher/classes', [TeacherController::class, 'getTeacherClasses']);
 });
