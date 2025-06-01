@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->prefix('students')->group(function () {
     Route::post('/achievements', [StudentController::class, 'uploadAchievement']);
     Route::get('/learning-journals', [StudentController::class, 'getLearningJournal']);
     Route::post('/learning-journals', [StudentController::class, 'saveLearningJournal']);
+    Route::patch('/learning-journals/update-cell', [StudentController::class, 'updateCell']);
     Route::get('/subjects', [StudentController::class, 'showSubjects']);//
     Route::get('/semester/subjects', [SemesterGoalController::class, 'getSubjects']); //
     Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);//
