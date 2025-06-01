@@ -66,23 +66,6 @@ class StudentRepository
         return LearningJournalSelf::create($data);
     }
 
-    /**
-     * Lưu hàng loạt learning journals và các chi tiết class/self study
-     * @param array $classJournals dạng:
-     *   [
-     *     [
-     *       'student_subject_id' => int,
-     *       'semester' => int,
-     *       'week_number' => int,
-     *       'start_date' => date,
-     *       'end_date' => date,
-     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
-     *     ],
-     *     ...
-     *   ]
-     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
-     */
-
     public function getAllSubjects()
     {
         return Subject::all();
@@ -116,9 +99,6 @@ class StudentRepository
         return StudyPlan::where('plan_id', $id)->delete();
     }
 
-    /**
-     * Lấy danh sách LearningJournal của student theo tuần
-     */
     public function getLearningJournals($studentId, $weekNumber)
     {
         return LearningJournal::with(['learningJournalClass', 'learningJournalSelf'])
@@ -255,30 +235,6 @@ class StudentRepository
         ->first();
     }
 
-
-    /**
-     * Lấy danh sách LearningJournal của student theo tuần
-     */
-
-
-    /**
-     * Lưu hàng loạt learning journals và các chi tiết class/self study
-     * @param array $classJournals dạng:
-     *   [
-     *     [
-     *       'student_subject_id' => int,
-     *       'semester' => int,
-     *       'week_number' => int,
-     *       'start_date' => date,
-     *       'end_date' => date,
-     *       'class_data' => [ 'date' => ..., 'my_lesson' => ..., ... ],
-     *     ],
-     *     ...
-     *   ]
-     * @param array $selfStudyJournals dạng tương tự, có key 'self_study_data'
-     */
-
-
     public function fetchSubjectsAndTags($studentId, $weekNumber)
     {
         $subjects = Subject::whereHas('studentSubject', function ($q) use ($studentId) {
@@ -343,5 +299,41 @@ class StudentRepository
         return Achievement::where('student_id', $studentId)
             ->orderBy('date_achieved', 'desc')
             ->get();
+    }
+
+    public function getLearningJournalIds($studentId, $weekNumber)
+    {
+        return LearningJournal::join('student_subject', 'learning_journal.student_subject_id', '=', 'student_subject.id')
+            ->where('student_subject.student_id', $studentId)
+            ->where('learning_journal.week_number', $weekNumber)
+            ->pluck('learning_journal.learning_journal_id');
+    }
+
+    public function updateCell($studentId, $weekNumber, $type, $date, $field, $value)
+    {
+        $learningJournalIds = $this->getLearningJournalIds($studentId, $weekNumber);
+
+        if ($learningJournalIds->isEmpty()) {
+            throw new \Exception('Không tìm thấy learning_journal nào cho student và tuần này');
+        }
+
+        $model = $type === 'in_class' ? new LearningJournalClass() : new LearningJournalSelf();
+
+        $record = $model->whereIn('learning_journal_id', $learningJournalIds)
+                        ->whereDate('date', $date)
+                        ->first();
+
+        if (!$record) {
+            throw new \Exception('Record trong bảng con không tồn tại');
+        }
+
+        if (!in_array($field, $record->getFillable())) {
+            throw new \Exception('Trường dữ liệu không hợp lệ');
+        }
+
+        $record->$field = $value;
+        $record->save();
+
+        return $record;
     }
 }

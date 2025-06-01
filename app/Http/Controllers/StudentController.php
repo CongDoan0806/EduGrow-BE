@@ -410,5 +410,43 @@ class StudentController extends Controller
             }),
         ]);
     }
+
+    public function updateCell(Request $request)
+    {
+        $user = Auth::guard('student')->user();
+        
+        if (!$user) {
+            return response()->json(['message' => 'User not authenticated'], 401);
+        }
+
+        $validated = $request->validate([
+            'week_number' => 'required|integer',
+            'type' => 'required|in:in_class,self_study',
+            'date' => 'required|date',
+            'field' => 'required|string',
+            'value' => 'nullable',
+        ]);
+
+        try {
+            $updatedRecord = $this->studentService->updateLearningJournalCell(
+                $user->student_id,
+                $validated['week_number'],
+                $validated['type'],
+                $validated['date'],
+                $validated['field'],
+                $validated['value']
+            );
+
+            return response()->json([
+                'message' => 'Cập nhật ô thành công',
+                'data' => $updatedRecord,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Cập nhật thất bại',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }
 

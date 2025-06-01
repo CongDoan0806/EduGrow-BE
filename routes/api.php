@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/admin/class',[AdminController::class, '
 
 Route::middleware('auth:sanctum')->get('/learning-journal', [StudentController::class, 'getLearningJournal']);
 Route::middleware('auth:sanctum')->post('/learning-journal', [StudentController::class, 'saveLearningJournal']);
+Route::middleware('auth:sanctum')->patch('/learning-journal/update-cell', [StudentController::class, 'updateCell']);
 Route::get('/learning-journal/week/{weekNumber}', [StudentController::class, 'getWeekDates']);
 
 Route::middleware('auth:sanctum')->post('/teachers/feedback', [TeacherController::class, 'createFeedback']);
