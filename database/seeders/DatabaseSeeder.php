@@ -30,6 +30,10 @@ class DatabaseSeeder extends Seeder
             LearningJournalClassSeeder::class,
             LearningJournalSelfSeeder::class,
             StudyPlanSeeder::class,
+            AdminSeeder::class,
+            SemesterGoalSeeder::class,
+            SemesterGoalContentSeeder::class,        
+            UpdateLearningJournalClassAndSelfSeeder::class,
         ]);
     }
 }
