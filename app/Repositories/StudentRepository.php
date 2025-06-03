@@ -306,7 +306,7 @@ class StudentRepository
         $learningJournalIds = $learningJournals->pluck('learning_journal_id');
 
         $tags = Tag::whereIn('learning_journal_id', $learningJournalIds)
-            ->with(['student', 'teachers'])
+            ->with(['student', 'teachers', 'tagReplies'])
             ->get();
 
         return [

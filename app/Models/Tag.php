@@ -30,8 +30,8 @@ class Tag extends Model
         return $this->belongsTo(Student::class, 'student_id');
     }
 
-    // public function tagReplies()
-    // {
-    //     return $this->hasMany(TagReply::class, 'tag_id');
-    // }
+    public function tagReplies()
+    {
+        return $this->hasMany(TagReplies::class, 'tag_id');
+    }
 }
