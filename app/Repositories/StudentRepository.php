@@ -344,4 +344,40 @@ class StudentRepository
             ->orderBy('date_achieved', 'desc')
             ->get();
     }
+
+    public function getLearningJournalIds($studentId, $weekNumber)
+    {
+        return LearningJournal::join('student_subject', 'learning_journal.student_subject_id', '=', 'student_subject.id')
+            ->where('student_subject.student_id', $studentId)
+            ->where('learning_journal.week_number', $weekNumber)
+            ->pluck('learning_journal.learning_journal_id');
+    }
+
+    public function updateCell($studentId, $weekNumber, $type, $date, $field, $value)
+    {
+        $learningJournalIds = $this->getLearningJournalIds($studentId, $weekNumber);
+
+        if ($learningJournalIds->isEmpty()) {
+            throw new \Exception('Không tìm thấy learning_journal nào cho student và tuần này');
+        }
+
+        $model = $type === 'in_class' ? new LearningJournalClass() : new LearningJournalSelf();
+
+        $record = $model->whereIn('learning_journal_id', $learningJournalIds)
+                        ->whereDate('date', $date)
+                        ->first();
+
+        if (!$record) {
+            throw new \Exception('Record trong bảng con không tồn tại');
+        }
+
+        if (!in_array($field, $record->getFillable())) {
+            throw new \Exception('Trường dữ liệu không hợp lệ');
+        }
+
+        $record->$field = $value;
+        $record->save();
+
+        return $record;
+    }
 }

@@ -310,4 +310,9 @@ class StudentService
     {
         return $this->studentRepository->getAchievementByStudentId($studentId);
     }
+
+    public function updateLearningJournalCell($studentId, $weekNumber, $type, $date, $field, $value)
+    {
+        return $this->studentRepository->updateCell($studentId, $weekNumber, $type, $date, $field, $value);
+    }
 }
