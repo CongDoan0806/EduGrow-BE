@@ -1,5 +1,4 @@
 <?php
-
 return [
 
     /*
@@ -28,6 +27,5 @@ return [
 'allowed_headers' => ['*'],
 
 'allowed_methods' => ['*'],
-
 
 ];

@@ -8,11 +8,7 @@ use Illuminate\Database\Seeder;
 
 class SemesterGoalSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
+
     public function run()
     {
         DB::table('semester_goals')->insert([
@@ -43,7 +39,7 @@ class SemesterGoalSeeder extends Seeder
             [
                 'sg_id' => 4,
                 'student_id' => 1,
-                'subject_id' => 4,
+                'subject_id' => 1,
                 'semester' => 'Học kỳ 1 2024-2025',
                 'deadline' => '2025-05-23',
                 'created_at' => '2025-05-23 10:16:16',

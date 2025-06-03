@@ -6,8 +6,10 @@ use App\Http\Controllers\LearningJournalController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\SemesterGoalController;
+use App\Http\Controllers\StudentSubjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -46,6 +48,8 @@ Route::middleware(['auth:sanctum'])->prefix('teacher')->group(function () {
     Route::get('/learning-journals/{id}/tags', [LearningJournalController::class, 'getTagByLearningJournalId']);
     Route::get('/', [TeacherController::class, 'index']);//
     Route::get('/teachers/{id}', [TeacherController::class, 'show']); //
+    Route::get('/student-rating', [StudentSubjectController::class, 'getStudentRating']);
+    Route::post('/rate-student', [StudentSubjectController::class, 'rateStudent']);
 });
 
 Route::middleware(['auth:sanctum'])->prefix('students')->group(function () {
